@@ -2,13 +2,13 @@
 
 namespace OCA\ScienceMesh\Controller;
 
+use OCA\ScienceMesh\PlainResponse;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\IConfig;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Http\TextPlainResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -16,8 +16,6 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Notification\IManager as INotificationManager;
 use OCP\IUserSession;
 use OCA\ScienceMesh\RevaHttpClient;
-use OCA\ScienceMesh\Plugins\ScienceMeshGenerateTokenPlugin;
-use OCA\ScienceMesh\Plugins\ScienceMeshAcceptTokenPlugin;
 
 class AppController extends Controller {
 	private $userId;
@@ -120,7 +118,7 @@ class AppController extends Controller {
 		$tokenStr = $invitationsData["invite_token"]["token"];
 		$iopUrl = $invitationsData["invite_token"]["user_id"]["idp"];
 		$iopDomain =  parse_url($iopUrl)["host"];
-		return new TextPlainResponse("$tokenStr@$iopDomain", Http::STATUS_OK);
+		return new PlainResponse("$tokenStr@$iopDomain", Http::STATUS_OK);
 	}
 
 	/**

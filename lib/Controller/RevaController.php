@@ -548,7 +548,8 @@ class RevaController extends Controller {
 		if (!$success) {
 			return new JSONResponse(["error" => "Folder not found"], 404);
 		}
-		$nodes = $node->getDirectoryListing();
+        //???????
+		$nodes = $this->userFolder->getDirectoryListing();
 		$resourceInfos = array_map(function (\OCP\Files\Node $node) {
 			return $this->nodeToCS3ResourceInfo($node);
 		}, $nodes);

@@ -15,7 +15,7 @@ $app = \OC::$server->query(\OCA\ScienceMesh\AppInfo\ScienceMeshApp::class);
         'order' => 10,
 
         // The route that will be shown on startup
-        'href' => $urlGenerator->linkToRoute('sciencemesh.page.index'),
+        'href' => $urlGenerator->linkToRoute('sciencemesh.app.generate'),
 
         // The icon that will be shown in the navigation, located in img/
         'icon' => $urlGenerator->imagePath('sciencemesh', 'app.svg'),

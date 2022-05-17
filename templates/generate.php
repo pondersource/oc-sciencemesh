@@ -1,7 +1,4 @@
-<?php
-script('sciencemesh', 'generate');
-style('sciencemesh', 'style');
-?>
+
 <div id="app">
 	<div id="app-navigation">
 		<?php print_unescaped($this->inc('navigation/index')); ?>
@@ -26,3 +23,7 @@ style('sciencemesh', 'style');
 	</div>
 </div>
 
+<?php
+script('sciencemesh', 'generate');
+style('sciencemesh', 'style');
+?>
