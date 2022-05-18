@@ -36,6 +36,7 @@
 
 namespace OCA\ScienceMesh\ShareProvider;
 
+use OC\GlobalScale\GlobalScaleConfig;
 use OC\Share20\Exception\InvalidShare;
 use OC\Share20\Share;
 use OCP\Constants;
@@ -102,7 +103,6 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param IRootFolder $rootFolder
 	 * @param IConfig $config
 	 * @param IUserManager $userManager
-	 * @param GlobalConfig\IGlobalScaleConfig $globalScaleConfig
 	 */
 	public function __construct(
 			IDBConnection $connection,
@@ -110,8 +110,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 			ILogger $logger,
 			IRootFolder $rootFolder,
 			IConfig $config,
-			IUserManager $userManager,
-			GlobalConfig\IGlobalScaleConfig $globalScaleConfig
+			IUserManager $userManager
 	) {
 		$this->dbConnection = $connection;
 		$this->l = $l10n;
@@ -119,7 +118,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$this->rootFolder = $rootFolder;
 		$this->config = $config;
 		$this->userManager = $userManager;
-		$this->gsConfig = $globalScaleConfig;
+		$this->gsConfig = new GlobalConfig\GlobalScaleConfig($config);
 	}
 
 	/**

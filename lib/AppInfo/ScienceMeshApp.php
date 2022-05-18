@@ -2,7 +2,6 @@
 
 namespace OCA\ScienceMesh\AppInfo;
 
-use OC\GlobalScale\Config;
 use OCP\AppFramework\App;
 use OCA\ScienceMesh\ShareProvider\ScienceMeshShareProvider;
 

@@ -2,12 +2,8 @@
 
 namespace OCA\ScienceMesh\Controller;
 
-use OCA\ScienceMesh\NextcloudAdapter;
+use OCA\DAV\TrashBin\TrashBinManager;
 use OCA\ScienceMesh\ShareProvider\ScienceMeshShareProvider;
-use OCA\ScienceMesh\Share\ScienceMeshSharePermissions;
-use OCA\ScienceMesh\User\ScienceMeshUserId;
-
-use OCA\Files_Trashbin\Trash\ITrashManager;
 
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -22,36 +18,26 @@ use \OCP\Files\NotFoundException;
 
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\TextPlainResponse;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\OCS\OCSNotFoundException;
-
-use OCA\CloudFederationAPI\Config;
-use OCP\Federation\ICloudFederationFactory;
-use OCP\Federation\ICloudFederationProviderManager;
-use OCP\Federation\ICloudIdManager;
 
 use OCP\Share\IManager;
 use OCP\Share\IShare;
-use OCP\Share\Exceptions\ShareNotFound;
-
-use Psr\Log\LoggerInterface;
 
 use OCP\App\IAppManager;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\IL10N;
 
-const RESTRICT_TO_SCIENCEMESH_FOLDER = false;
 
 class RevaController extends Controller {
+const RESTRICT_TO_SCIENCEMESH_FOLDER = false;
 
 
 	/* @var ISession */
 	private $session;
 
-	/** @var LoggerInterface */
-	private $logger;
+	///** @var LoggerInterface */
+	//private $logger;
 
 	/** @var IUserManager */
 	private $userManager;
@@ -68,11 +54,11 @@ class RevaController extends Controller {
 	/** @var Config */
 	private $config;
 
-	/** @var ICloudFederationFactory */
-	private $factory;
+	///** @var ICloudFederationFactory */
+	//private $factory;
 
-	/** @var ICloudIdManager */
-	private $cloudIdManager;
+	///** @var ICloudIdManager*/
+	//private $cloudIdManager;
 
 	/** @var \OCP\Files\Node */
 	private $lockedNode;
@@ -92,14 +78,13 @@ class RevaController extends Controller {
 		IURLGenerator $urlGenerator,
 		$userId,
 		IConfig $config,
-		\OCA\ScienceMesh\Service\UserService $UserService,
-		ITrashManager $trashManager,
+		TrashBinManager $trashManager,
 		IManager $shareManager,
 		IGroupManager $groupManager,
-		ICloudFederationProviderManager $cloudFederationProviderManager,
+		/*ICloudFederationProviderManager $cloudFederationProviderManager,
 		ICloudFederationFactory $factory,
-		ICloudIdManager $cloudIdManager,
-		LoggerInterface $logger,
+		ICloudIdManager $cloudIdManager,*/
+		//LoggerInterface $logger,
 		IAppManager $appManager,
 		IL10N $l10n,
 		ScienceMeshShareProvider $shareProvider
@@ -118,10 +103,10 @@ class RevaController extends Controller {
 		$this->trashManager = $trashManager;
 		$this->shareManager = $shareManager;
 		$this->groupManager = $groupManager;
-		$this->cloudFederationProviderManager = $cloudFederationProviderManager;
+		/*$this->cloudFederationProviderManager = $cloudFederationProviderManager;
 		$this->factory = $factory;
-		$this->cloudIdManager = $cloudIdManager;
-		$this->logger = $logger;
+		$this->cloudIdManager = $cloudIdManager;*/
+		//$this->logger = $logger;
 		$this->appManager = $appManager;
 		$this->l = $l10n;
 		$this->shareProvider = $shareProvider;
@@ -135,12 +120,12 @@ class RevaController extends Controller {
 	}
 
 	private function revaPathToNextcloudPath($revaPath) {
-		$prefix = (RESTRICT_TO_SCIENCEMESH_FOLDER ? 'sciencemesh/' : '');
+		$prefix = (self::RESTRICT_TO_SCIENCEMESH_FOLDER ? 'sciencemesh/' : '');
     return $prefix . substr($revaPath, 1);
 	}
 
 	private function nextcloudPathToRevaPath($nextcloudPath) {
-		$prefix = (RESTRICT_TO_SCIENCEMESH_FOLDER ? 'sciencemesh/' : '');
+		$prefix = (self::RESTRICT_TO_SCIENCEMESH_FOLDER ? 'sciencemesh/' : '');
     return '/' . substr($nextcloudPath, strlen($prefix));
 	}
 
@@ -181,6 +166,8 @@ class RevaController extends Controller {
 	}
 	private function checkRevadAuth() {
 		$authHeader = $this->request->getHeader('X-Reva-Secret');
+
+        $an =$this->config->getRevaSharedSecret();
     if ($authHeader != $this->config->getRevaSharedSecret()) {
 		  throw new \OCP\Files\NotPermittedException('Please set an http request header "X-Reva-Secret: <your_shared_secret>"!');
 		}
@@ -368,7 +355,7 @@ class RevaController extends Controller {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	public function CreateHome($userId) {
-		if (RESTRICT_TO_SCIENCEMESH_FOLDER) {
+		if (self::RESTRICT_TO_SCIENCEMESH_FOLDER) {
 			$this->init($userId);
 			$homeExists = $this->userFolder->nodeExists("sciencemesh");
 			if (!$homeExists) {

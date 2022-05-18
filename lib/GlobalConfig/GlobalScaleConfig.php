@@ -20,10 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OC\GlobalScale;
-
-
-use OCA\ScienceMesh\GlobalConfig\IGlobalScaleConfig;
+namespace OCA\ScienceMesh\GlobalConfig;
 use OCP\IConfig;
 
 class GlobalScaleConfig implements IGlobalScaleConfig {
