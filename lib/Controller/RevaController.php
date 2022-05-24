@@ -167,7 +167,6 @@ const RESTRICT_TO_SCIENCEMESH_FOLDER = false;
 	private function checkRevadAuth() {
 		$authHeader = $this->request->getHeader('X-Reva-Secret');
 
-        $an =$this->config->getRevaSharedSecret();
     if ($authHeader != $this->config->getRevaSharedSecret()) {
 		  throw new \OCP\Files\NotPermittedException('Please set an http request header "X-Reva-Secret: <your_shared_secret>"!');
 		}

@@ -93,7 +93,14 @@ class RevaHttpClient {
 			curl_setopt($ch, CURLOPT_USERPWD, $user.":".$this->revaLoopbackSecret);
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		}
+
 		$output = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if (!$output){
+            $error = curl_error($ch);
+            $errorno = curl_errno($ch);
+            echo "";
+        }
 		curl_close($ch);
 		return $output;
 	}

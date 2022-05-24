@@ -19,6 +19,8 @@
  *
  */
 namespace OCA\ScienceMesh;
+
+use OC\Share20\DefaultShareProvider;
 use OCA\ScienceMesh\AppInfo\Application;
 use OCA\ScienceMesh\ShareProvider\ScienceMeshShareProvider;
 use OCP\Share\IProviderFactory;
@@ -74,7 +76,7 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 	 * @return ScienceMeshShareProvider
 	 */
 	protected function scienceMeshShareProvider() {
-		if ($this->scienceMeshShareProvider() === null) {
+		if ($this->scienceMeshShareProvider === null) {
 			/*
 			 * Check if the app is enabled
 			 */
@@ -108,12 +110,12 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 		$provider = null;
 		if ($id === 'ocinternal') {
 			$provider = $this->defaultShareProvider();
-		} elseif ($id === 'scienceMeshSharing') {
+		} elseif ($id === 'sciencemesh') {
 			$provider = $this->scienceMeshShareProvider();
 		}
 
 		if ($provider === null) {
-			throw new ProviderException('No provider with id .' . $id . ' found.');
+			throw new ProviderException('No provider with id ' . $id . ' found.');
 		}
 
 		return $provider;
