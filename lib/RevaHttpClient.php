@@ -101,6 +101,8 @@ class RevaHttpClient {
             $errorno = curl_errno($ch);
             echo "";
         }
+		$info = curl_getinfo($ch);
+		error_log('curl output:' . var_export($output, true) . ' info: ' . var_export($info, true));
 		curl_close($ch);
 		return $output;
 	}
@@ -134,20 +136,20 @@ class RevaHttpClient {
 		$params["loginType"] = "basic";
 		$params["loginUsername"] = $user;
 		$params["loginPassword"] = $this->revaLoopbackSecret;
-		return $this->revaPost('send', $user, $params);
+		return $this->revaPost('ocm/send', $user, $params);
 	}
 
 	public function ocmProvider() {
-		return $this->revaGet('ocm-provider');
+		return $this->revaGet('ocm/ocm-provider');
 	}
 
 	public function findAcceptedUsers($userId) {
-		$users = $this->revaPost('invites/find-accepted-users', $userId);
+		$users = $this->revaPost('ocm/invites/find-accepted-users', $userId);
 		return $users;
 	}
 
 	public function getAcceptTokenFromReva($providerDomain, $token, $userId) {
-		$tokenFromReva = $this->revaPost('invites/forward', $userId, [
+		$tokenFromReva = $this->revaPost('ocm/invites/forward', $userId, [
 			'providerDomain' => $providerDomain,
 			'token' => $token
 		]);
@@ -155,7 +157,8 @@ class RevaHttpClient {
 	}
 
 	public function generateTokenFromReva($userId) {
-		$tokenFromReva = $this->revaPost('invites/generate', $userId);
+		$tokenFromReva = $this->revaPost('ocm/invites/generate', $userId);
+		error_log('Got token from reva!' . $tokenFromReva);
 		return json_decode($tokenFromReva, true);
 	}
 }
