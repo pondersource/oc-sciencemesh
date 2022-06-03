@@ -2,6 +2,7 @@
 
 namespace OCA\ScienceMesh\Controller;
 
+use Laminas\Diactoros\Response\TextResponse;
 use OCA\ScienceMesh\PlainResponse;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -139,7 +140,7 @@ class AppController extends Controller {
 		$providerDomain = $this->request->getParam('providerDomain');
 		$token = $this->request->getParam('token');
 		$contacts = $this->httpClient->getAcceptTokenFromReva($providerDomain, $token, $this->userId);
-		return new TextPlainResponse($contacts, Http::STATUS_OK);
+		return new PlainResponse($contacts, Http::STATUS_OK);
 	}
 
 	/**
@@ -148,6 +149,6 @@ class AppController extends Controller {
 	 */
 	public function contactsFindUsers() {
 		$find_users = $this->httpClient->findAcceptedUsers($this->userId);
-		return new TextPlainResponse($find_users, Http::STATUS_OK);
+		return new PlainResponse($find_users, Http::STATUS_OK);
 	}
 }
