@@ -2,13 +2,13 @@
 
 namespace OCA\ScienceMesh\Plugins;
 
-use OCP\Collaboration\Collaborators\ISearchPlugin;
+use OC\User\User;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCA\ScienceMesh\RevaHttpClient;
 
-class ScienceMeshSearchPlugin implements ISearchPlugin {
+class ScienceMeshSearchPlugin {
 	protected $shareeEnumeration;
 	/** @var IConfig */
 	private $config;
@@ -26,10 +26,10 @@ class ScienceMeshSearchPlugin implements ISearchPlugin {
 		$this->revaHttpClient = new RevaHttpClient($this->config);
 	}
 
-	public function search($search, $limit, $offset, ISearchResult $searchResult) {
+	public function search($search, $limit, $offset) {
 		$result = json_decode($this->revaHttpClient->findAcceptedUsers($this->userId), true);
 		if (!isset($result['accepted_users'])) {
-			return;
+			return [];
 		}
 		$users = $result['accepted_users'];
 
@@ -54,14 +54,12 @@ class ScienceMeshSearchPlugin implements ISearchPlugin {
 				]
 			];
 		}
-
-		$result = [
-			'wide' => [],
-			'exact' => $exactResults
-		];
-
 		$resultType = new SearchResultType('remotes');
-		$searchResult->addResultSet($resultType, $result['wide'], $result['exact']);
-		return true;
+		$searchResult = [
+            "type" => $resultType,
+            "group" => [],
+            "users" => $exactResults
+        ];
+		return $searchResult;
 	}
 }
