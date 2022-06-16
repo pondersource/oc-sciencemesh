@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 element.innerHTML = 'No connection with reva';
             } else {
                 var element = document.getElementById("show_result");
-                element.innerHTML = response;
+                element.innerHTML = `<a href="${response}">${response}</a>`;
                 $('#test').show();
             }
         }).fail(function (response, code) {

@@ -14,7 +14,7 @@ document.getElementById('elem').onclick = function () {
             element.innerHTML= 'No connection with reva';
         } else {
             let element = document.getElementById("show_result");
-            element.innerText = response;
+            element.innerText = `<a href="${response}">${response}</a>`;
             $('#test').show();
         }
     }).fail(function (response, code) {
