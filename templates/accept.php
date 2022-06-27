@@ -12,7 +12,7 @@ style('sciencemesh', 'style');
 				<div class="app-content-list">
 					<div href="#" class="app-content-list-item">
 						<div class="app-content-list-item-line-one" >
-							<input id="token" type="text" style="font-size:30%;" placeholder="token@sciencemesh.site">
+							<input id="token" type="text" style="font-size:200%;width:800px;" placeholder="token@sciencemesh.site">
 						</div>
 						<div class="app-content-list-item-menu">
 						 	<div class="icon-add" id="elem"></div>

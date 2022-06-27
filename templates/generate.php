@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<div id="test" href="#" class="app-content-list-item">
-					<div class="app-content-list-item-line-one" id="show_result" style="font-size:40%;"></div>
+					<div class="app-content-list-item-line-one" id="show_result" style="font-size:200%;"></div>
 				</div>
 			</div>
 		</div>
