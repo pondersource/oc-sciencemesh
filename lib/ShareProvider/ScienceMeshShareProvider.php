@@ -92,7 +92,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	private $gsConfig;
 
 	/** @var array list of supported share types */
-	private $supportedShareType = [1000];
+	private $supportedShareType = [1,2,3,4,5,6,1000];
 
 	/**
 	 * DefaultShareProvider constructor.
@@ -654,13 +654,14 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 */
 	private function removeShareFromTableById($shareId) {
 		$qb = $this->dbConnection->getQueryBuilder();
-		$qb->delete('share')
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($shareId)))
-			->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH)));
-		$qb->execute();
-
 		$qb->delete('federated_reshares')
 			->where($qb->expr()->eq('share_id', $qb->createNamedParameter($shareId)));
+		$qb->execute();
+
+		$qb->delete('share')
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($shareId)))
+			->andWhere($qb->expr()->in('share_type', $qb->createNamedParameter($this->supportedShareType, IQueryBuilder::PARAM_INT_ARRAY)));
+
 		$qb->execute();
 	}
 
