@@ -15,10 +15,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             contentType: 'application/x-www-form-urlencoded',
             data: data
         }).done(function (response) {
-
             if (response === '' || response === false) {
                 var element = document.getElementById("test_error");
                 element.innerHTML = 'No connection with reva';
+            } else if(response.startsWith('Accepted invite from')){
+                document.getElementById('token').value = '';
+                alert(response);
             } else {
                 let result = JSON.parse(response);
                 if (result.hasOwnProperty('message')) {
