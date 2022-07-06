@@ -110,7 +110,7 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 		$provider = null;
 		if ($id === 'ocinternal') {
 			$provider = $this->defaultShareProvider();
-		} elseif ($id === 'sciencemesh') {
+		} elseif ($id === 'ocFederatedSharing' || $id === 'sciencemesh') {
 			$provider = $this->scienceMeshShareProvider();
 		}
 
