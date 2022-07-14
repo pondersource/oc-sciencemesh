@@ -413,7 +413,7 @@ class ScienceMeshShareProvider implements IShareProvider {
         $accepted = 0; //pending
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share_external')
-			->setValue('share_type', $qb->createNamedParameter($share_type))
+			//->setValue('share_type', $qb->createNamedParameter($share_type))
 			->setValue('remote', $qb->createNamedParameter($shareData["remote"]))
 			->setValue('remote_id', $qb->createNamedParameter($shareData["remote_id"]))
 			->setValue('share_token', $qb->createNamedParameter($shareData["share_token"]))
@@ -910,8 +910,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$cursor = $qb->select('*')
 			->from('share_external')
-			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(14)))
-			->andWhere($qb->expr()->eq('share_token', $qb->createNamedParameter($token)))
+			//->where($qb->expr()->eq('share_type', $qb->createNamedParameter(14)))
+			->where($qb->expr()->eq('share_token', $qb->createNamedParameter($token)))
 			->execute();
 		$data = $cursor->fetch();
 		if ($data === false) {
@@ -1263,10 +1263,10 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share_external')
-			->where(
+			/*->where(
 				$qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH))
-			)
-			->andWhere(
+			)*/
+			->where(
 				$qb->expr()->eq('user', $qb->createNamedParameter($userId))
 			);
 		$cursor = $qb->execute();
