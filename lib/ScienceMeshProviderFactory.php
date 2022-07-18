@@ -21,6 +21,7 @@
 namespace OCA\ScienceMesh;
 
 use OC\Share20\DefaultShareProvider;
+use OCA\FederatedFileSharing\FederatedShareProvider;
 use OCA\ScienceMesh\AppInfo\Application;
 use OCA\ScienceMesh\ShareProvider\ScienceMeshShareProvider;
 use OCP\Share\IProviderFactory;
@@ -38,6 +39,8 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 	private $serverContainer;
 	/** @var DefaultShareProvider */
 	private $defaultProvider = null;
+    /** @var FederatedShareProvider */
+    private $federatedProvider = null;
 	/** @var ScienceMeshShareProvider */
 	private $scienceMeshShareProvider = null;
 
@@ -70,8 +73,34 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 		return $this->defaultProvider;
 	}
 
+    /**
+     * Create the federated share provider
+     *
+     * @return FederatedShareProvider
+     */
+    protected function federatedShareProvider() {
+        if ($this->federatedProvider === null) {
+            /*
+             * Check if the app is enabled
+             */
+            $appManager = $this->serverContainer->getAppManager();
+            //** change to science mesh  */
+            if (!$appManager->isEnabledForUser('federatedfilesharing')) {
+                return null;
+            }
+
+            /*
+             * TODO: add factory to federated sharing app
+             */
+            $federatedFileSharingApp = new \OCA\FederatedFileSharing\AppInfo\Application();
+            $this->federatedProvider = $federatedFileSharingApp->getFederatedShareProvider();
+        }
+
+        return $this->federatedProvider;
+    }
+
 	/**
-	 * Create the federated share provider
+	 * Create the sciencemesh share provider
 	 *
 	 * @return ScienceMeshShareProvider
 	 */
@@ -99,6 +128,7 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 	public function getProviders() {
 		return [
 			$this->defaultShareProvider(),
+            $this->federatedShareProvider(),
 			$this->scienceMeshShareProvider()
 		];
 	}
@@ -110,7 +140,11 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 		$provider = null;
 		if ($id === 'ocinternal') {
 			$provider = $this->defaultShareProvider();
-		} elseif ($id === 'ocFederatedSharing' || $id === 'sciencemesh') {
+		}
+        elseif ($id === "ocFederatedSharing"){
+            $provider = $this->federatedShareProvider();
+        }
+        elseif ($id === 'sciencemesh') {
 			$provider = $this->scienceMeshShareProvider();
 		}
 
@@ -131,7 +165,11 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 			$shareType === \OCP\Share::SHARE_TYPE_GROUP ||
 			$shareType === \OCP\Share::SHARE_TYPE_LINK) {
 			$provider = $this->defaultShareProvider();
-		} elseif ($shareType === \OCP\Share::SHARE_TYPE_REMOTE) {
+		}
+        elseif ($shareType === \OCP\Share::SHARE_TYPE_REMOTE){
+            $provider = $this->federatedShareProvider();
+        }
+        elseif ($shareType === \OCP\Share::SHARE_TYPE_SCIENCEMESH) {
 			$provider = $this->scienceMeshShareProvider();
 		}
 
