@@ -1,17 +1,21 @@
+document.addEventListener("DOMContentLoaded", function(event) {
 //Everything will be for working with contacts
 var baseUrl = OC.generateUrl('/apps/sciencemesh');
-$('#test').hide(); 
+//$('#test').hide(); 
 $.ajax({
     url: baseUrl + '/contacts/users',
     type: 'GET',
     contentType: 'application/json',
 }).done(function (response) {
-    if(response === '' || response === false) {
-        var element = document.getElementById("test_error");
-        element.innerHTML= 'No connection with reva';
+
+    var headerElement = document.getElementById("message");
+    let token = JSON.parse(response);
+    if(response === '' || response === false || token['accepted_users'] === undefined) {
+        headerElement.innerHTML= 'No Reva Contact';
         //$('#test').show(); 
     } else {
-    let token = JSON.parse(response);
+        headerElement.innerHTML= 'Reva Contacts';
+
     for(tokenData in token) {
         if(token.hasOwnProperty(tokenData)) {
             if(tokenData === 'accepted_users') {
@@ -22,23 +26,26 @@ $.ajax({
                     const username = accepted_users[accept].id.opaque_id;
                     const idp = accepted_users[accept].id.idp;
                     const provider = new URL(idp).host;
-                    const result = `${displayName} (${username}@${provider})`;
-                  
+                    const div = document.createElement("div");
+                    div.style = "padding:6px";
+                    div.id = `${username}@${provider}`;
+                    div.textContent = `${displayName} (${username}@${provider})`;
+                    div.addEventListener("click", elemOnClick);
                     var element = document.getElementById("show_result");
-                    element.innerHTML=result;
+                    element.appendChild(div);
                     $('#test').show();
                 }
             }
         } 
     }
+    
 }
 }).fail(function (response, code) {
     console.log(response)
     //alert('The token is invalid')
 });
-document.getElementById('elem').onclick = function () { 
-    console.log('clicked');
-    var parts = document.getElementById('token').value.split('@');
+const elemOnClick = (event) => { 
+    var parts = event.target.id.split('@');
     var token = parts[0];
     var providerDomain = parts[1];
 
@@ -54,13 +61,13 @@ document.getElementById('elem').onclick = function () {
     }).done(function (response) {
       
        if(response === '' || response === false) {
-            var element = document.getElementById("test_error");
+            var element = document.getElementById("message");
             element.innerHTML= 'No connection with reva';
         } else {
             let result = JSON.parse(response);
             if(result.hasOwnProperty('message')) {
                 let test = result.message
-                var element = document.getElementById("test_error");
+                var element = document.getElementById("message");
                 element.innerHTML=test;
 
                 $('#provider').hide();
@@ -74,4 +81,5 @@ document.getElementById('elem').onclick = function () {
         console.log(response)
         //alert('The token is invalid')
     });
-};
+};  
+});

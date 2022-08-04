@@ -2,6 +2,7 @@
 script('sciencemesh', 'contacts');
 style('sciencemesh', 'style');
 ?>
+<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com">
 <div id="app">
 	<div id="app-navigation">
 		<?php print_unescaped($this->inc('navigation/index')); ?>
@@ -10,8 +11,8 @@ style('sciencemesh', 'style');
 		<div id="app-content-wrapper" class="viewcontainer">
 			<div class="app-content-list">
 				<div href="#" class="app-content-list-item" id="test">
-					<div class="app-content-list-item-icon" style="background-color: rgb(151, 72, 96);">M</div>
-					<div class="app-content-list-item-line-one" id="show_result" style="font-size: 200%;"></div>
+					<div class="app-content-list-item-icon" style="background-color: rgb(151, 72, 96); font-size:200%; padding: 6px;" id="message"></div>
+					<div class="app-content-list-item-line-one" id="show_result" style="font-size: 200%;">	
 				</div>
 			</div>
 		</div>
