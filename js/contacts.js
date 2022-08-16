@@ -30,7 +30,6 @@ $.ajax({
                     div.style = "padding:6px";
                     div.id = `${username}@${provider}`;
                     div.textContent = `${displayName} (${username}@${provider})`;
-                    div.addEventListener("click", elemOnClick);
                     var element = document.getElementById("show_result");
                     element.appendChild(div);
                     $('#test').show();
@@ -43,43 +42,5 @@ $.ajax({
 }).fail(function (response, code) {
     console.log(response)
     //alert('The token is invalid')
-});
-const elemOnClick = (event) => { 
-    var parts = event.target.id.split('@');
-    var token = parts[0];
-    var providerDomain = parts[1];
-
-    var data = 'providerDomain=' + encodeURIComponent(providerDomain) +
-  '&token=' + encodeURIComponent(token);
-
-    var baseUrl = OC.generateUrl('/apps/sciencemesh');
-    $.ajax({
-        url: baseUrl + '/contacts/accept',
-        type: 'POST',
-        contentType: 'application/x-www-form-urlencoded',
-        data: data
-    }).done(function (response) {
-      
-       if(response === '' || response === false) {
-            var element = document.getElementById("message");
-            element.innerHTML= 'No connection with reva';
-        } else {
-            let result = JSON.parse(response);
-            if(result.hasOwnProperty('message')) {
-                let test = result.message
-                var element = document.getElementById("message");
-                element.innerHTML=test;
-
-                $('#provider').hide();
-                $('#display_name').hide();
-            } else {
-                console.log(result)
-            }
-        }
-     
-    }).fail(function (response, code) {
-        console.log(response)
-        //alert('The token is invalid')
-    });
-};  
+}); 
 });
