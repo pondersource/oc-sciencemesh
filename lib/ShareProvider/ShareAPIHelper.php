@@ -65,6 +65,7 @@ class ShareAPIHelper {
 	}
 	
 	public function createShare($share, $shareWith, $permissions, $expireDate) {
+		error_log("SAH: createShare");
 		$node = $share->getNode();
 		$share->setSharedWith($shareWith);
 		$share->setPermissions($permissions);

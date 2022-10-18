@@ -251,8 +251,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 			$token,
 			$share->getShareType()
 		);
-		return $shareId;
-		/*
+		// return $shareId;
+
 		$failure = false;
 
 		try {
@@ -294,7 +294,6 @@ class ScienceMeshShareProvider implements IShareProvider {
 		}
 
 		return $shareId;
-		*/
 	}
 
 	/**

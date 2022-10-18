@@ -120,6 +120,8 @@ class RevaHttpClient {
 	}
 
 	public function createShare($user, $params) {
+		error_log("RCH: createShare");
+
 		if (!isset($params['sourcePath'])) {
 			throw new \Exception("Missing sourcePath", 400);
 		}
