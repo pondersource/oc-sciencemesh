@@ -102,7 +102,12 @@ class RevaHttpClient {
             echo "";
         }
 		curl_close($ch);
-		$logLines = explode("\n", "Response from POST to $url:\n" . $output);
+		$logLines = explode("\n", "OC->REVA POST to $url\nREQUEST BODY:\n"
+		  . json_encode($params, JSON_PRETTY_PRINT)
+			. "\nRESPONSE STATUS:\n"
+			. $httpcode
+			. "\nRESPONSE BODY:\n"
+			. $output);
 		for ($i = 0; $i < count($logLines); $i++) {
 			error_log($logLines[$i]);
 		}
