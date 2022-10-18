@@ -148,7 +148,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \Exception
 	 */
 	public function createInternal(IShare $share) {
-		error_log("Suppressing call to ScienceMeshShareProvider#create to avoid creating the outgoing share twice");
+		error_log("SMSP: Suppressing call to ScienceMeshShareProvider#create to avoid creating the outgoing share twice");
 	}
 	/**
 	 * Share a path
@@ -159,6 +159,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \Exception
 	 */
 	public function create(IShare $share) {
+		error_log("SMSP: Creating share!");
+
 		$shareWith = $share->getSharedWith();
 		$itemSource = $share->getNodeId();
 		$itemType = $share->getNodeType();
@@ -236,6 +238,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \Exception
 	 */
 	protected function createScienceMeshShare(IShare $share) {
+		error_log("SMSP: Creating ScienceMesh share!");
+
 		$token = "foo"; // $this->tokenHandler->generateToken();
 		$shareId = $this->addSentShareToDB(
 			$share->getNodeId(),
@@ -327,6 +331,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	protected function getShareFromExternalShareTable(IShare $share) {
+		error_log("SMSP: getShareFromExternalShareTable!");
 		$query = $this->dbConnection->getQueryBuilder();
 		$query->select('*')->from($this->externalShareTable)
 			->where($query->expr()->eq('user', $query->createNamedParameter($share->getShareOwner())))
@@ -356,6 +361,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return int
 	 */
 	private function addSentShareToDB($itemSource, $itemType, $shareWith, $sharedBy, $uidOwner, $permissions, $token, $shareType) {
+		error_log("SMSP: addSentShareToDB!");
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share')
 			->setValue('share_type', $qb->createNamedParameter($shareType))
@@ -395,6 +401,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return int
 	 */
 	public function addReceivedShareToDB($shareData) {
+		error_log("SMSP: addReceivedShareToDB");
 		$share_type =  \OCP\Share::SHARE_TYPE_REMOTE;
 		$mountpoint = "{{TemporaryMountPointName#" . $shareData["name"] . "}}";
 		$mountpoint_hash = md5($mountpoint);
@@ -436,6 +443,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return IShare The share object
 	 */
 	public function update(IShare $share) {
+		error_log("SMSP: update!");
 		/*
 		 * We allow updating the permissions of sciencemesh shares
 		 */
@@ -461,6 +469,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return IShare The share object
 	 */
 	public function updateReceivedShare(IShare $share) {
+		error_log("SMSP: updateReceivedShare!");
+
 		/*
 		 * We allow updating the permissions of sciencemesh shares
 		 */
@@ -479,6 +489,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \OC\HintException
 	 */
 	protected function sendPermissionUpdate(IShare $share) {
+		error_log("SMSP: sendPermissionUpdate!");
+
 		$remoteId = $this->getRemoteId($share);
 		// if the local user is the owner we send the permission change to the initiator
 		if ($this->userManager->userExists($share->getShareOwner())) {
@@ -497,6 +509,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param string $token
 	 */
 	protected function updateSuccessfulReShare($shareId, $token) {
+		error_log("SMSP: updateSuccessfulReShare!");
 		$query = $this->dbConnection->getQueryBuilder();
 		$query->update('share')
 			->where($query->expr()->eq('id', $query->createNamedParameter($shareId)))
@@ -511,6 +524,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param $remoteId
 	 */
 	public function storeRemoteId(int $shareId, string $remoteId): void {
+		error_log("SMSP: storeRemoteId!");
 		$query = $this->dbConnection->getQueryBuilder();
 		$query->insert('federated_reshares')
 			->values(
@@ -530,6 +544,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	public function getRemoteId(IShare $share): string {
+		error_log("SMSP: getRemoteId!");
+
 		$query = $this->dbConnection->getQueryBuilder();
 		$query->select('remote_id')->from('federated_reshares')
 			->where($query->expr()->eq('share_id', $query->createNamedParameter((int)$share->getId())));
@@ -548,6 +564,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function move(IShare $share, $recipient) {
+		error_log("SMSP: move!");
+
 		/*
 		 * This function does nothing yet as it is just for outgoing
 		 * federated shares.
@@ -562,6 +580,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getChildren(IShare $parent) {
+		error_log("SMSP: getChildren!");
+
 		$children = [];
 
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -588,6 +608,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \OC\HintException
 	 */
 	public function delete(IShare $share) {
+				error_log("SMSP: delete!");
+
 		// throw new Exception("Whoah");
 		/*
 				list(, $remote) = $this->addressHandler->splitUserRemote($share->getSharedWith());
@@ -617,6 +639,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \OC\HintException
 	 */
 	protected function revokeShare($share, $isOwner) {
+		error_log("SMSP: revokeShare!");
+
 		if ($this->userManager->userExists($share->getShareOwner()) && $this->userManager->userExists($share->getSharedBy())) {
 			// If both the owner and the initiator of the share are local users we don't have to notify anybody else
 			return;
@@ -642,6 +666,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param IShare $share
 	 */
 	public function removeShareFromTable(IShare $share) {
+		error_log("SMSP: removeShareFromTable!");
+
 		$this->removeShareFromTableById($share->getId());
 	}
 
@@ -651,6 +677,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param string $shareId
 	 */
 	private function removeShareFromTableById($shareId) {
+		error_log("SMSP: removeShareFromTableById!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->delete('federated_reshares')
 			->where($qb->expr()->eq('share_id', $qb->createNamedParameter($shareId)));
@@ -667,6 +695,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function deleteFromSelf(IShare $share, $recipient) {
+		error_log("SMSP: deleteFromSelf!");
+
 		// nothing to do here. Technically deleteFromSelf in the context of federated
 		// shares is a umount of an external storage. This is handled here
 		// apps/files_sharing/lib/external/manager.php
@@ -674,11 +704,15 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function restore(IShare $share, string $recipient): IShare {
+		error_log("SMSP: restore!");
+
 		throw new GenericShareException('not implemented');
 	}
 
 
 	public function getSharesInFolder($userId, Folder $node, $reshares) {
+		error_log("SMSP: getSharesInFolder!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share', 's')
@@ -723,6 +757,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function getSharesBy($userId, $shareType, $node, $reshares, $limit, $offset) {
+		error_log("SMSP: getSharesBy!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share');
@@ -779,6 +815,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function getShareById($id, $recipientId = null) {
+		error_log("SMSP: getShareById!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		$qb->select('*')
@@ -810,6 +848,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getSharesByPath(Node $path) {
+		error_log("SMSP: getSharesByPath!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		// get federated user shares
@@ -832,6 +872,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset) {
+		error_log("SMSP: getSharedWith!");
+
 		/** @var IShare[] $shares */
 		$shares = [];
 
@@ -875,6 +917,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	public function getShareByToken($token) {
+		error_log("SMSP: getShareByToken!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		$cursor = $qb->select('*')
@@ -905,6 +949,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	public function getReceivedShareByToken($token) {
+		error_log("SMSP: getReceivedShareByToken!");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$cursor = $qb->select('*')
 			->from('share_external')
@@ -932,6 +978,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	private function getRawShare($id) {
+		error_log("SMSP: getRawShare!");
+
 
 		// Now fetch the inserted share and create a complete share object
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -959,6 +1007,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	private function createShareObject($data) {
+		error_log("SMSP: createShareObject!");
+
 		$share = new Share($this->rootFolder, $this->userManager);
 		$share->setId((int)$data['id'])
 			->setShareType((int)$data['share_type'])
@@ -1000,6 +1050,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws ShareNotFound
 	 */
 	private function createExternalShareObject($data) {
+		error_log("SMSP: createExternalShareObject!");
+
 		$share = new Share($this->rootFolder, $this->userManager);
 		$share->setId((int)$data['id'])
 			->setShareType((int)$data['share_type'])
@@ -1020,6 +1072,8 @@ class ScienceMeshShareProvider implements IShareProvider {
      * @throws InvalidShare
 	 */
 	private function getNode($userId, $id) {
+		error_log("SMSP: getNode!");
+
 		try {
 			$userFolder = $this->rootFolder->getUserFolder($userId);
 		} catch (NotFoundException $e) {
@@ -1043,6 +1097,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param int $shareType
 	 */
 	public function userDeleted($uid, $shareType) {
+		error_log("SMSP: userDeleted!");
+
 		//TODO: probabaly a good idea to send unshare info to remote servers
 
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -1059,6 +1115,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param string $gid
 	 */
 	public function groupDeleted($gid) {
+		error_log("SMSP: groupDeleted!");
+
 		// We don't handle groups here
 	}
 
@@ -1069,6 +1127,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @param string $gid
 	 */
 	public function userDeletedFromGroup($uid, $gid) {
+		error_log("SMSP: userDeletedFromGroup!");
+
 		// We don't handle groups here
 	}
 
@@ -1078,6 +1138,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isOutgoingServer2serverShareEnabled() {
+		error_log("SMSP: isOutgoingServer2serverShareEnabled!");
+
 		if ($this->gsConfig->onlyInternalFederation()) {
 			return false;
 		}
@@ -1091,6 +1153,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isIncomingServer2serverShareEnabled() {
+		error_log("isIncomingServer2serverShareEnabled");
 		if ($this->gsConfig->onlyInternalFederation()) {
 			return false;
 		}
@@ -1105,6 +1168,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isOutgoingServer2serverGroupShareEnabled() {
+		error_log("isOutgoingServer2serverGroupShareEnabled");
 		if ($this->gsConfig->onlyInternalFederation()) {
 			return false;
 		}
@@ -1118,6 +1182,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isIncomingServer2serverGroupShareEnabled() {
+		error_log("isIncomingServer2serverGroupShareEnabled");
 		if ($this->gsConfig->onlyInternalFederation()) {
 			return false;
 		}
@@ -1131,6 +1196,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isFederatedGroupSharingSupported() {
+		error_log("isFederatedGroupSharingSupported");
 
 	    //***
         return $this->cloudFederationProviderManager->isReady();
@@ -1142,6 +1208,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isLookupServerQueriesEnabled() {
+		error_log("isLookupServerQueriesEnabled");
 		// in a global scale setup we should always query the lookup server
 		if ($this->gsConfig->isGlobalScaleEnabled()) {
 			return true;
@@ -1157,6 +1224,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return bool
 	 */
 	public function isLookupServerUploadEnabled() {
+		error_log("isLookupServerUploadEnabled");
 		// in a global scale setup the admin is responsible to keep the lookup server up-to-date
 		if ($this->gsConfig->isGlobalScaleEnabled()) {
 			return false;
@@ -1169,6 +1237,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @inheritdoc
 	 */
 	public function getAccessList($nodes, $currentAccess) {
+		error_log("SMSP: getAccessList");
 		$ids = [];
 		foreach ($nodes as $node) {
 			$ids[] = $node->getId();
@@ -1205,6 +1274,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function getAllShares(): iterable {
+		error_log("SMSP: getAllShares");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		$qb->select('*')
@@ -1228,6 +1299,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function getSentShares($userId): iterable {
+		error_log("SMSP: getSentShares");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		$qb->select('*')
@@ -1258,6 +1331,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function getReceivedShares($userId): iterable {
+		error_log("SMSP: getReceivedShares");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share_external')
@@ -1283,6 +1358,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function deleteSentShareByName($userId, $name) {
+		error_log("SMSP: deleteSentShareByName");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('fileid')
 			->from('filecache')
@@ -1319,6 +1396,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 		return false;
 	}
 	public function deleteReceivedShareByOpaqueId($userId, $opaqueId) {
+		error_log("SMSP: deleteReceivedShareByOpaqueId");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share_external')
@@ -1345,7 +1424,9 @@ class ScienceMeshShareProvider implements IShareProvider {
 		}
 	}
 	public function getSentShareByPath($userId, $path) {
+		error_log("SMSP: getSentShareByPath");
 		$qb = $this->dbConnection->getQueryBuilder();
+
 		$qb->select('fileid')
 			->from('filecache')
 			->where(
@@ -1379,6 +1460,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 		return $share;
 	}
 	public function getShareByOpaqueId($opaqueId) {
+		error_log("SMSP: getShareByOpaqueId");
+
 		$qb = $this->dbConnection->getQueryBuilder();
 		$c = $qb->select('is_external')
 			->from('sciencemesh_shares')
@@ -1408,6 +1491,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function addScienceMeshUser($user) {
+		error_log("SMSP: addScienceMeshUser");
+
 		$idp = $user->getIdp();
 		$opaqueId = $user->getOpaqueId();
 		$type = $user->getType();
@@ -1435,6 +1520,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 	}
 
 	public function addScienceMeshShare($scienceMeshData, $shareData) {
+		error_log("SMSP: addScienceMeshShare");
+
 		if ($scienceMeshData['is_external']) {
 			return $this->addReceivedShareToDB($shareData);
 		} else {
@@ -1444,6 +1531,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 
     public function getAllSharesBy($userId, $shareTypes, $nodeIDs, $reshares)
     {
+			error_log("SMSP: getAllSharesBy");
+
         $shares = [];
 
         $qb = $this->dbConnection->getQueryBuilder();
@@ -1498,11 +1587,13 @@ class ScienceMeshShareProvider implements IShareProvider {
 
     public function getAllSharedWith($userId, $node)
     {
+			error_log("getAllSharedWith");
         return $this->getSharedWith($userId, \OCP\Share::SHARE_TYPE_REMOTE, $node, -1, 0);
     }
 
     public function getSharesWithInvalidFileid(int $limit)
     {
+			error_log("SMSP: getSharesWithInvalidFileid");
         $validShareTypes = [
             \OCP\Share::SHARE_TYPE_REMOTE,
         ];
@@ -1538,11 +1629,13 @@ class ScienceMeshShareProvider implements IShareProvider {
 
     public function updateForRecipient(IShare $share, $recipient)
     {
+			error_log("SMSP: updateForRecipient");
        return $share;
     }
 
     public function getProviderCapabilities()
     {
+			error_log("SMSP: getProviderCapabilities");
        return[
            "sciencemesh" => [
                self::CAPABILITY_STORE_EXPIRATION,
