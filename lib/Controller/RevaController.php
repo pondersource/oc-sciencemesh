@@ -806,7 +806,7 @@ const RESTRICT_TO_SCIENCEMESH_FOLDER = false;
 		} catch (LockedException $e) {
 			throw new OCSNotFoundException($this->l->t('Could not create share'));
 		}
-		$share->setShareType(1000);//IShare::TYPE_SCIENCEMESH);
+		$share->setShareType(\OCP\Share::SHARE_TYPE_REMOTE);//IShare::TYPE_SCIENCEMESH);
 		$share->setSharedBy($userId);
 		$share->setSharedWith($shareWith);
 		$share->setShareOwner($userId);

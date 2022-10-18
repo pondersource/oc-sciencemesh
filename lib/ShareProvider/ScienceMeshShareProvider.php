@@ -62,8 +62,6 @@ use OCP\Share\IShareProvider;
  * @package OCA\ScienceMesh\ShareProvider\ScienceMeshShareProvider
  */
 class ScienceMeshShareProvider implements IShareProvider {
-	public const SHARE_TYPE_SCIENCEMESH = 1000;
-
 	/** @var IDBConnection */
 	private $dbConnection;
 
@@ -92,7 +90,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	private $gsConfig;
 
 	/** @var array list of supported share types */
-	private $supportedShareType = [1,2,3,4,5,6,1000];
+	private $supportedShareType = [\OCP\Share::SHARE_TYPE_REMOTE];
 
 	/**
 	 * DefaultShareProvider constructor.
@@ -171,7 +169,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		/*
 		 * Check if file is not already shared with the remote user
 		 */
-		$alreadyShared = $this->getSharedWith($shareWith, $this::SHARE_TYPE_SCIENCEMESH, $share->getNode(), 1, 0);
+		$alreadyShared = $this->getSharedWith($shareWith,  \OCP\Share::SHARE_TYPE_REMOTE, $share->getNode(), 1, 0);
 		if (!empty($alreadyShared)) {
 			$message = 'Sharing %1$s failed, because this item is already shared with %2$s';
 			$message_t = $this->l->t('Sharing %1$s failed, because this item is already shared with user %2$s', [$share->getNode()->getName(), $shareWith]);
@@ -397,7 +395,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @return int
 	 */
 	public function addReceivedShareToDB($shareData) {
-		$share_type = 1000;//IShare::TYPE_SCIENCEMESH;
+		$share_type =  \OCP\Share::SHARE_TYPE_REMOTE;
 		$mountpoint = "{{TemporaryMountPointName#" . $shareData["name"] . "}}";
 		$mountpoint_hash = md5($mountpoint);
 		$qbt = $this->dbConnection->getQueryBuilder();
@@ -689,7 +687,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('folder'))
 			))
 			->andWhere(
-				$qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH))
+				$qb->expr()->eq('share_type', $qb->createNamedParameter( \OCP\Share::SHARE_TYPE_REMOTE))
 			);
 
 		/**
@@ -1050,7 +1048,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb = $this->dbConnection->getQueryBuilder();
 
 		$qb->delete('share')
-			->where($qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH)))
+			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE)))
 			->andWhere($qb->expr()->eq('uid_owner', $qb->createNamedParameter($uid)))
 			->execute();
 	}
@@ -1179,7 +1177,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('share_with', 'token', 'file_source')
 			->from('share')
-			->where($qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH)))
+			->where($qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE)))
 			->andWhere($qb->expr()->in('file_source', $qb->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('file')),
@@ -1212,7 +1210,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb->select('*')
 			->from('share')
 			->where(
-				$qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH))
+				$qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE))
 			);
 		$cursor = $qb->execute();
 		while ($data = $cursor->fetch()) {
@@ -1235,7 +1233,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb->select('*')
 			->from('share')
 			->where(
-				$qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH))
+				$qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE))
 			)
 			->andWhere(
 				$qb->expr()->orX(
@@ -1264,7 +1262,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$qb->select('*')
 			->from('share_external')
 			->where(
-				$qb->expr()->eq('share_type', $qb->createNamedParameter($this::SHARE_TYPE_SCIENCEMESH))
+				$qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE))
 			)
 			->andWhere(
 				$qb->expr()->eq('user', $qb->createNamedParameter($userId))
@@ -1453,7 +1451,7 @@ class ScienceMeshShareProvider implements IShareProvider {
             ->from("share");
 
         // In federated sharing currently we have only one share_type_remote
-        $qb->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(self::SHARE_TYPE_SCIENCEMESH)));
+        $qb->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(\OCP\Share::SHARE_TYPE_REMOTE)));
 
         $qb->andWhere($qb->expr()->in('file_source', $qb->createParameter('file_source_ids')));
 
@@ -1500,13 +1498,13 @@ class ScienceMeshShareProvider implements IShareProvider {
 
     public function getAllSharedWith($userId, $node)
     {
-        return $this->getSharedWith($userId, self::SHARE_TYPE_SCIENCEMESH, $node, -1, 0);
+        return $this->getSharedWith($userId, \OCP\Share::SHARE_TYPE_REMOTE, $node, -1, 0);
     }
 
     public function getSharesWithInvalidFileid(int $limit)
     {
         $validShareTypes = [
-            self::SHARE_TYPE_SCIENCEMESH,
+            \OCP\Share::SHARE_TYPE_REMOTE,
         ];
         // other share types aren't handled by this provider
 
