@@ -256,28 +256,34 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$failure = false;
 
 		try {
-			$sharedByFederatedId = $share->getSharedBy();
-			if ($this->userManager->userExists($sharedByFederatedId)) {
-				$cloudId = $this->cloudIdManager->getCloudId($sharedByFederatedId, $this->addressHandler->generateRemoteURL());
-				$sharedByFederatedId = $cloudId->getId();
-			}
-			$ownerCloudId = $this->cloudIdManager->getCloudId($share->getShareOwner(), $this->addressHandler->generateRemoteURL());
-			$send = $this->notifications->sendRemoteShare(
-				$token,
-				$share->getSharedWith(),
-				$share->getNode()->getName(),
-				$shareId,
-				$share->getShareOwner(),
-				$ownerCloudId->getId(),
-				$share->getSharedBy(),
-				$sharedByFederatedId,
-				$share->getShareType()
-			);
-
-			if ($send === false) {
-				$failure = true;
-			}
-		} catch (\Exception $e) {
+				error_log("sending Share to reva");
+				$node = $share->getNode();
+				// $share->setSharedWith($shareWith);
+				// $share->setPermissions($permissions);
+				$pathParts = explode("/", $node->getPath());
+				$sender = $pathParts[1];
+				$sourceOffset = 3;
+				$targetOffset = 3;
+				$prefix = "/";
+				$suffix = ($node->getType() == "dir" ? "/" : "");
+		
+				// "home" is reva's default work space name, prepending that in the source path:
+				$sourcePath = $prefix . "home/" . implode("/", array_slice($pathParts, $sourceOffset)) . $suffix;
+				$targetPath = $prefix . implode("/", array_slice($pathParts, $targetOffset)) . $suffix;
+				$shareWithParts = explode("@", $shareWith);
+				$details = [
+					'sourcePath' => $sourcePath,
+					'targetPath' => $targetPath,
+					'type' => $node->getType(),
+					'recipientUsername' => $shareWithParts[0],
+					'recipientHost' => $shareWithParts[1]
+				];
+				foreach ($details as $k => $v) {
+					error_log("share detail '$k': '$v'");
+				}
+				$this->revaHttpClient->createShare($sender, $details);
+			} catch (\Exception $e) {
+			error_log("exception: " . var_export($e, true));
 			$this->logger->logException($e, [
 				'message' => 'Failed to notify remote server of federated share, removing share.',
 				'level' => ILogger::ERROR,
@@ -293,6 +299,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 			throw new \Exception($message_t);
 		}
 
+		error_log("done");
 		return $shareId;
 	}
 
