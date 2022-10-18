@@ -55,6 +55,7 @@ use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IShare;
 use OCP\Share\IShareProvider;
+use OCA\ScienceMesh\RevaHttpClient;
 
 /**
  * Class ScienceMeshShareProvider
@@ -117,6 +118,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$this->config = $config;
 		$this->userManager = $userManager;
 		$this->gsConfig = new GlobalConfig\GlobalScaleConfig($config);
+		$this->revaHttpClient = new RevaHttpClient($config);
 	}
 
 	/**
@@ -167,6 +169,8 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$permissions = $share->getPermissions();
 		$sharedBy = $share->getSharedBy();
 		$shareType = $share->getShareType();
+
+		error_log("shareWith $shareWith");
 
 		/*
 		 * Check if file is not already shared with the remote user
@@ -270,6 +274,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 				// "home" is reva's default work space name, prepending that in the source path:
 				$sourcePath = $prefix . "home/" . implode("/", array_slice($pathParts, $sourceOffset)) . $suffix;
 				$targetPath = $prefix . implode("/", array_slice($pathParts, $targetOffset)) . $suffix;
+				$shareWith = $share->getSharedWith();
 				$shareWithParts = explode("@", $shareWith);
 				$details = [
 					'sourcePath' => $sourcePath,
