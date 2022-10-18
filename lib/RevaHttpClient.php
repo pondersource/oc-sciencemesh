@@ -102,6 +102,10 @@ class RevaHttpClient {
             echo "";
         }
 		curl_close($ch);
+		$logLines = explode("\n", "Response from POST to $url:\n" . $output);
+		for ($i = 0; $i < count($logLines); $i++) {
+			error_log($logLines[$i]);
+		}
 		return $output;
 	}
 
