@@ -458,16 +458,8 @@ const RESTRICT_TO_SCIENCEMESH_FOLDER = false;
 	 */
 	public function EmptyRecycle($userId) {
 		$this->init($userId);
-		$user = $this->userManager->get($userId);
-		$trashItems = $this->trashManager->listTrashRoot($user);
-
-		$result = []; // Where is this used?
-		foreach ($trashItems as $node) {
-			#getOriginalLocation : returns string
-			if (preg_match("/^sciencemesh/", $node->getOriginalLocation())) {
-				$this->trashManager->removeItem($node);
-			}
-		}
+		// See https://github.com/sciencemesh/oc-sciencemesh/issues/4#issuecomment-1283542906
+		$this->trashManager->deleteAll();
 		return new JSONResponse("OK", Http::STATUS_OK);
 	}
 
