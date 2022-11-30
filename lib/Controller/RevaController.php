@@ -18,6 +18,7 @@ use \OCP\Files\NotFoundException;
 
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
 use OCP\Share\IManager;
@@ -576,7 +577,7 @@ class RevaController extends Controller {
 		$path = "subdir/";
 		$storageId = $this->request->getParam("storage_id");
 		$opaqueId = $this->request->getParam("opaque_id");
-		return new TextPlainResponse($path, Http::STATUS_OK);
+		return new DataResponse($path, Http::STATUS_OK);
 	}
 
 	/**
@@ -889,7 +890,7 @@ class RevaController extends Controller {
 		} catch (LockedException $e) {
 			throw new OCSNotFoundException($this->l->t('Could not create share'));
 		}
-		$share->setShareType(IShare::TYPE_REMOTE);//IShare::TYPE_SCIENCEMESH);
+		$share->setShareType(\OCP\Share::SHARE_TYPE_REMOTE);//IShare::TYPE_SCIENCEMESH);
 		$share->setSharedBy($userId);
 		$share->setSharedWith($shareWith);
 		$share->setShareOwner($owner);
@@ -899,7 +900,7 @@ class RevaController extends Controller {
 		$share = $this->shareProvider->createInternal($share);
 		// $response = $this->shareInfoToCs3Share($share);
 		// error_log("response:" . json_encode($response));
-		return new TextPlainResponse($share->getId(), Http::STATUS_CREATED);
+		return new DataResponse($share->getId(), Http::STATUS_CREATED);
 	}
 
 	/**
