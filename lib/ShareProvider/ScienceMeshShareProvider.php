@@ -151,6 +151,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 */
 	public function createInternal(IShare $share) {
 		error_log("SMSP: Suppressing call to ScienceMeshShareProvider#create to avoid creating the outgoing share twice");
+	    return $share;
 	}
 	/**
 	 * Share a path
@@ -436,7 +437,7 @@ class ScienceMeshShareProvider implements IShareProvider {
         $accepted = 0; //pending
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share_external')
-			->setValue('share_type', $qb->createNamedParameter($share_type))
+			// ->setValue('share_type', $qb->createNamedParameter($share_type))
 			->setValue('remote', $qb->createNamedParameter($shareData["remote"]))
 			->setValue('remote_id', $qb->createNamedParameter($shareData["remote_id"]))
 			->setValue('share_token', $qb->createNamedParameter($shareData["share_token"]))
