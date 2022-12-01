@@ -280,7 +280,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	protected function createScienceMeshShare(IShare $share) {
 		error_log("SMSP: Creating ScienceMesh share!");
 
-		$token = "foo"; // $this->tokenHandler->generateToken();
+		$token = $share->getToken(); // $this->tokenHandler->generateToken();
 		$shareId = $this->addSentShareToDB(
 			$share->getNodeId(),
 			$share->getNodeType(),
