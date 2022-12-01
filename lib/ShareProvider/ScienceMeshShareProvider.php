@@ -150,20 +150,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 	 * @throws \Exception
 	 */
 	public function createInternal(IShare $share) {
-		error_log("SMSP: Suppressing call to ScienceMeshShareProvider#create to avoid creating the outgoing share twice");
-	    return $share;
-	}
-	/**
-	 * Share a path
-	 *
-	 * @param IShare $share
-	 * @return IShare The share object
-	 * @throws ShareNotFound
-	 * @throws \Exception
-	 */
-	public function create(IShare $share) {
-		error_log("SMSP: Creating share!");
-
+		error_log("SMSP: createInternal");
 		$shareWith = $share->getSharedWith();
 		$itemSource = $share->getNodeId();
 		$itemType = $share->getNodeType();
@@ -173,6 +160,7 @@ class ScienceMeshShareProvider implements IShareProvider {
 
 		error_log("shareWith $shareWith");
 
+		error_log("checking if already shared " . $share->getNode()->getName());
 		/*
 		 * Check if file is not already shared with the remote user
 		 */
@@ -233,6 +221,53 @@ class ScienceMeshShareProvider implements IShareProvider {
 		$data = $this->getRawShare($shareId);
 		return $this->createShareObject($data);
 	}
+	/**
+	 * Share a path
+	 *
+	 * @param IShare $share
+	 * @return IShare The share object
+	 * @throws ShareNotFound
+	 * @throws \Exception
+	 */
+	public function create(IShare $share) {
+		error_log("SSP-createShare calling RHC-createShare");
+		$node = $share->getNode();
+		$shareWith = $share->getSharedWith();
+		// $share->setPermissions($permissions);
+		$pathParts = explode("/", $node->getPath());
+		$sender = $pathParts[1];
+		$sourceOffset = 3;
+		$targetOffset = 3;
+		$prefix = "/";
+		$suffix = ($node->getType() == "dir" ? "/" : "");
+
+		// "home" is reva's default work space name, prepending that in the source path:
+		$sourcePath = $prefix . "home/" . implode("/", array_slice($pathParts, $sourceOffset)) . $suffix;
+		$targetPath = $prefix . implode("/", array_slice($pathParts, $targetOffset)) . $suffix;
+		$shareWithParts = explode("@", $shareWith);
+		error_log("SAH-createShare calling RHC-createShare");
+		$response = $this->revaHttpClient->createShare($sender, [
+			'sourcePath' => $sourcePath,
+			'targetPath' => $targetPath,
+			'type' => $node->getType(),
+			'recipientUsername' => $shareWithParts[0],
+			'recipientHost' => $shareWithParts[1]
+		]);
+		if (!isset($response) || !isset($response->share) || !isset($response->share->owner) || !isset($response->share->owner->idp)) {
+			throw new \Exception("Unexpected response from reva");
+		}
+		error_log("Back in SSP-createShare after RHC-createShare");
+		error_log(var_export($response->share->id->opaqueId, true));
+		error_log(var_export($response->share->owner->idp, true));
+		// error_log(var_export($response, true));
+		$share->setId("will-set-this-later");
+		error_log("setId done");
+		$share->setProviderId($response->share->owner->idp);
+		error_log("setProviderId done");
+		$share->setShareTime(new \DateTime());
+		error_log("SSP-createShare done");
+		return $share;
+	}
 
 	/**
 	 * create sciencemesh share and inform the recipient
@@ -256,64 +291,64 @@ class ScienceMeshShareProvider implements IShareProvider {
 			$token,
 			$share->getShareType()
 		);
-		// return $shareId;
-
-		$failure = false;
-
-		try {
-				error_log("sending Share to reva");
-				$node = $share->getNode();
-				// $share->setSharedWith($shareWith);
-				// $share->setPermissions($permissions);
-				$pathParts = explode("/", $node->getPath());
-				$sender = $pathParts[1];
-				$sourceOffset = 3;
-				$targetOffset = 3;
-				$prefix = "/";
-				$suffix = ($node->getType() == "dir" ? "/" : "");
-		
-				// "home" is reva's default work space name, prepending that in the source path:
-				$sourcePath = $prefix . "home/" . implode("/", array_slice($pathParts, $sourceOffset)) . $suffix;
-				$targetPath = $prefix . implode("/", array_slice($pathParts, $targetOffset)) . $suffix;
-				$shareWith = $share->getSharedWith();
-				$shareWithParts = explode("@", $shareWith);
-				$details = [
-					'sourcePath' => $sourcePath,
-					'targetPath' => $targetPath,
-					'type' => $node->getType(),
-					'recipientUsername' => $shareWithParts[0],
-					'recipientHost' => $shareWithParts[1]
-				];
-				foreach ($details as $k => $v) {
-					error_log("share detail '$k': '$v'");
-				}
-				$result = $this->revaHttpClient->createShare($sender, $details);
-				if ($result == false) {
-					error_log("Error response from Reva while creating share");
-					$failure = $this->l->t('Sharing %1$s failed, error response from Reva while creating share.',
-						[$share->getNode()->getName(), $share->getSharedWith()]);
-				} else {
-					error_log("OK response from Reva while creating share");
-
-				}
-			} catch (\Exception $e) {
-			error_log("exception: " . var_export($e, true));
-			$this->logger->logException($e, [
-				'message' => 'Failed to notify remote server of federated share, removing share.',
-				'level' => ILogger::ERROR,
-				'app' => 'federatedfilesharing',
-			]);
-			$failure = $this->l->t('Sharing %1$s failed, could not find %2$s, maybe the server is currently unreachable or uses a self-signed certificate.',
-			[$share->getNode()->getName(), $share->getSharedWith()]);
-		}
-
-		if ($failure) {
-			$this->removeShareFromTableById($shareId);
-			throw new \Exception($failure);
-		}
-
-		error_log("done");
 		return $shareId;
+
+		// $failure = false;
+
+		// try {
+		// 		error_log("sending Share to reva");
+		// 		$node = $share->getNode();
+		// 		// $share->setSharedWith($shareWith);
+		// 		// $share->setPermissions($permissions);
+		// 		$pathParts = explode("/", $node->getPath());
+		// 		$sender = $pathParts[1];
+		// 		$sourceOffset = 3;
+		// 		$targetOffset = 3;
+		// 		$prefix = "/";
+		// 		$suffix = ($node->getType() == "dir" ? "/" : "");
+		
+		// 		// "home" is reva's default work space name, prepending that in the source path:
+		// 		$sourcePath = $prefix . "home/" . implode("/", array_slice($pathParts, $sourceOffset)) . $suffix;
+		// 		$targetPath = $prefix . implode("/", array_slice($pathParts, $targetOffset)) . $suffix;
+		// 		$shareWith = $share->getSharedWith();
+		// 		$shareWithParts = explode("@", $shareWith);
+		// 		$details = [
+		// 			'sourcePath' => $sourcePath,
+		// 			'targetPath' => $targetPath,
+		// 			'type' => $node->getType(),
+		// 			'recipientUsername' => $shareWithParts[0],
+		// 			'recipientHost' => $shareWithParts[1]
+		// 		];
+		// 		foreach ($details as $k => $v) {
+		// 			error_log("share detail '$k': '$v'");
+		// 		}
+		// 		$result = $this->revaHttpClient->createShare($sender, $details);
+		// 		if ($result == false) {
+		// 			error_log("Error response from Reva while creating share");
+		// 			$failure = $this->l->t('Sharing %1$s failed, error response from Reva while creating share.',
+		// 				[$share->getNode()->getName(), $share->getSharedWith()]);
+		// 		} else {
+		// 			error_log("OK response from Reva while creating share");
+
+		// 		}
+		// 	} catch (\Exception $e) {
+		// 	error_log("exception: " . var_export($e, true));
+		// 	$this->logger->logException($e, [
+		// 		'message' => 'Failed to notify remote server of federated share, removing share.',
+		// 		'level' => ILogger::ERROR,
+		// 		'app' => 'federatedfilesharing',
+		// 	]);
+		// 	$failure = $this->l->t('Sharing %1$s failed, could not find %2$s, maybe the server is currently unreachable or uses a self-signed certificate.',
+		// 	[$share->getNode()->getName(), $share->getSharedWith()]);
+		// }
+
+		// if ($failure) {
+		// 	$this->removeShareFromTableById($shareId);
+		// 	throw new \Exception($failure);
+		// }
+
+		// error_log("done");
+		// return $shareId;
 	}
 
 	/**
