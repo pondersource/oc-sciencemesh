@@ -286,7 +286,15 @@ class ScienceMeshShareProvider implements IShareProvider {
 				foreach ($details as $k => $v) {
 					error_log("share detail '$k': '$v'");
 				}
-				$this->revaHttpClient->createShare($sender, $details);
+				$result = $this->revaHttpClient->createShare($sender, $details);
+				if ($result == false) {
+					error_log("Error response from Reva while creating share");
+					$failure = $this->l->t('Sharing %1$s failed, error response from Reva while creating share.',
+						[$share->getNode()->getName(), $share->getSharedWith()]);
+				} else {
+					error_log("OK response from Reva while creating share");
+
+				}
 			} catch (\Exception $e) {
 			error_log("exception: " . var_export($e, true));
 			$this->logger->logException($e, [
@@ -294,14 +302,13 @@ class ScienceMeshShareProvider implements IShareProvider {
 				'level' => ILogger::ERROR,
 				'app' => 'federatedfilesharing',
 			]);
-			$failure = true;
+			$failure = $this->l->t('Sharing %1$s failed, could not find %2$s, maybe the server is currently unreachable or uses a self-signed certificate.',
+			[$share->getNode()->getName(), $share->getSharedWith()]);
 		}
 
 		if ($failure) {
 			$this->removeShareFromTableById($shareId);
-			$message_t = $this->l->t('Sharing %1$s failed, could not find %2$s, maybe the server is currently unreachable or uses a self-signed certificate.',
-				[$share->getNode()->getName(), $share->getSharedWith()]);
-			throw new \Exception($message_t);
+			throw new \Exception($failure);
 		}
 
 		error_log("done");
