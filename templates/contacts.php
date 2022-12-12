@@ -8,7 +8,7 @@ style('sciencemesh', 'style');
 	</div>
 	<div id="app-content">
 		<div id="app-content-wrapper" class="viewcontainer">
-			<div class="app-content-list" id="test">
+			<div class="app-content-list" id="test_error">
 			</div>
 		</div>
 	</div> 	

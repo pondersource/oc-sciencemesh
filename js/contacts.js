@@ -6,10 +6,12 @@ $.ajax({
     type: 'GET',
     contentType: 'application/json',
 }).done(function (response) {
+
+    var element = document.getElementById("test_error");
+    
     if(response === '' || response === false) {
         var element = document.getElementById("test_error");
         element.innerHTML= 'No connection with reva';
-        //$('#test').show(); 
     } else {
     let token = JSON.parse(response);
     for(tokenData in token) {
@@ -25,13 +27,13 @@ $.ajax({
                         const result = `
                                 <div href="#" class="app-content-list-item profile-item">
                                     <div class="app-content-list-item-icon" style="">
-                                        <img src="https://cdn-icons-png.flaticon.com/512/16/16363.png">
+                                        <div class="profile-img"></div>
                                     </div>
                                     <div class="app-content-list-item-line-one" id="show_result" >
                                         <p class="displayname">${displayName}</p><p class="username-provider">${username}@${provider}</p>
                                     </div>  
                                 </div>`;                  
-                        var element = document.getElementById("test");
+                        var element = document.getElementById("test_error");
                         element.innerHTML = result;
                     }
 
@@ -45,13 +47,15 @@ $.ajax({
                                 <p class="username-provider">There're no contacts!</p>
                             </div>  
                         </div>`;                  
-                var element = document.getElementById("test");
+                var element = document.getElementById("test_error");
                 element.innerHTML = result;
                 $('#test').show();
 
             }
         } 
     }
+    setTimeout(() => {$("#test_error").hide()},5000);
+
 }
 }).fail(function (response, code) {
     console.log(response)
@@ -74,8 +78,9 @@ document.getElementById('elem').onclick = function () {
         data: data
     }).done(function (response) {
       
+        var element = document.getElementById("test_error");
+        $("#test_error").show();
        if(response === '' || response === false) {
-            var element = document.getElementById("test_error");
             element.innerHTML= 'No connection with reva';
         } else {
             let result = JSON.parse(response);
@@ -90,7 +95,8 @@ document.getElementById('elem').onclick = function () {
                 console.log(result)
             }
         }
-     
+        setTimeout(() => {$("#test_error").hide()},5000);
+
     }).fail(function (response, code) {
         console.log(response)
         //alert('The token is invalid')
