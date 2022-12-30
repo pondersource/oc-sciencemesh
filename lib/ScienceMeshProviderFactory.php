@@ -69,7 +69,7 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 				$this->serverContainer->getLazyRootFolder()
 			);
 		}
-
+    error_log("ScienceMeshProviderFactory returns its default share provider");
 		return $this->defaultProvider;
 	}
 
@@ -121,6 +121,7 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 			$scienceMeshApplication = new Application();
 			$this->scienceMeshShareProvider = $scienceMeshApplication->getScienceMeshShareProvider();
 		}
+    error_log("ScienceMeshProviderFactory returns its ScienceMesh share provider");
 
 		return $this->scienceMeshShareProvider;
 	}
@@ -164,15 +165,13 @@ class ScienceMeshProviderFactory implements IProviderFactory {
 		if ($shareType === \OCP\Share::SHARE_TYPE_USER  ||
 			$shareType === \OCP\Share::SHARE_TYPE_GROUP ||
 			$shareType === \OCP\Share::SHARE_TYPE_LINK) {
+			error_log("ScienceMeshProviderFactory returns a share provider for local");
 			$provider = $this->defaultShareProvider();
+		} elseif ($shareType === \OCP\Share::SHARE_TYPE_REMOTE){
+        $provider = $this->federatedShareProvider();
+    }
+    elseif ($shareType === \OCP\Share::SHARE_TYPE_SCIENCEMESH) {
 		}
-        elseif ($shareType === \OCP\Share::SHARE_TYPE_REMOTE){
-            $provider = $this->federatedShareProvider();
-        }
-        elseif ($shareType === \OCP\Share::SHARE_TYPE_SCIENCEMESH) {
-			$provider = $this->scienceMeshShareProvider();
-		}
-
 		if ($provider === null) {
 			throw new ProviderException('No share provider for share type ' . $shareType);
 		}

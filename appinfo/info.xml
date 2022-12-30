@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
 <info>
     <id>sciencemesh</id>
-    <name>Science Mesh</name>
-    <description>Sare your knowledge using nextcloud and reve</description>
+    <name>Science Mesh (preview)</name>
+    <summary>Connect your ownCloud-10 instance to your Reva instance and the Science Mesh</summary>
+    <description>Connect your ownCloud-10 instance to your Reva instance and the Science Mesh</description>
     <licence>AGPL</licence>
     <author>Ponder Source</author>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <namespace>ScienceMesh</namespace>
     <category>integration</category>
+    <screenshot>https://avatars.githubusercontent.com/u/46584276</screenshot>
     <dependencies>
-        <owncloud min-version="8" max-version="10"/>
+        <owncloud min-version="10" max-version="10"/>
     </dependencies>
 </info>

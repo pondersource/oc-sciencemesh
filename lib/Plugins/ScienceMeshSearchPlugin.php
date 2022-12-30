@@ -48,7 +48,7 @@ class ScienceMeshSearchPlugin {
 				"name" => $user['display_name'] ."@". $domain, // FIXME: should this be just the part before the @ sign?
 				"type" => "ScienceMesh",
 				"value" => [
-					"shareType" => 1000, // FIXME: Replace with SHARE_TYPE_SCIENCEMESH
+					"shareType" =>  \OCP\Share::SHARE_TYPE_REMOTE,
 					"shareWith" => $user['id']['opaque_id'] ."@". $domain, // FIXME: should this be just the part before the @ sign?
 					"server" => $user['id']['idp']
 				]
