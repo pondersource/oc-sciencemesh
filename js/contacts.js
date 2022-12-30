@@ -1,6 +1,6 @@
 //Everything will be for working with contacts
 var baseUrl = OC.generateUrl('/apps/sciencemesh');
-$('#test').hide(); 
+$('#test_error').hide(); 
 $.ajax({
     url: baseUrl + '/contacts/users',
     type: 'GET',
@@ -9,7 +9,7 @@ $.ajax({
     if(response === '' || response === false) {
         var element = document.getElementById("test_error");
         element.innerHTML= 'No connection with reva';
-        //$('#test').show(); 
+        $('#test_error').show(); 
     } else {
     let token = JSON.parse(response);
     for(tokenData in token) {
@@ -31,11 +31,11 @@ $.ajax({
                                         <p class="displayname">${displayName}</p><p class="username-provider">${username}@${provider}</p>
                                     </div>  
                                 </div>`;                  
-                        var element = document.getElementById("test");
+                        var element = document.getElementById("test_error");
                         element.innerHTML = result;
                     }
 
-                $('#test').show();
+                $('#test_error').show();
             }else{
                 const result = `
                         <div href="#" class="app-content-list-item profile-item" >
@@ -47,7 +47,7 @@ $.ajax({
                         </div>`;                  
                 var element = document.getElementById("test");
                 element.innerHTML = result;
-                $('#test').show();
+                $('#test_error').show();
 
             }
         } 
