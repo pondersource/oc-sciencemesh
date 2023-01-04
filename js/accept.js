@@ -15,12 +15,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             contentType: 'application/x-www-form-urlencoded',
             data: data
         }).done(function (response) {
-  
-  
             var element = document.getElementById("test_error");
             $("#test_error").show();
             if (response === '' || response === false) {
-                element.innerHTML = 'Something goes wrong: No connection with reva';
+                element.innerHTML = 'Something goes wrong: No Sciencemesh Connection';
+                jQuery(element).addClass('text-error');
             } else if(response.startsWith('Accepted invite from')){
                 document.getElementById('token').value = '';
                 alert(response);
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 if (result.hasOwnProperty('message')) {
                     let test = result.message;
                     element.innerHTML = test || 'Success';
-                    
+                    jQuery(element).addClass('text-success');
                     $('#provider').hide();
                     $('#display_name').hide();
                 } else {
