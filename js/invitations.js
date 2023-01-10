@@ -11,7 +11,7 @@ document.getElementById('elem').onclick = function () {
     }).done(function (response) {
         if(response === '' || response === false) {
             var element = document.getElementById("test_1");
-            element.innerHTML= 'No connection with reva';
+            element.innerHTML= 'No Sciencemesh Connection';
         } else {
             let element = document.getElementById("show_result");
             element.innerText = `<a href="${response}">${response}</a>`;
