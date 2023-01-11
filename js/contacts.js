@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 //Everything will be for working with contacts
 var baseUrl = OC.generateUrl('/apps/sciencemesh');
-//$('#test').hide(); 
+
+$('#test').hide(); 
 $.ajax({
     url: baseUrl + '/contacts/users',
     type: 'GET',
@@ -12,7 +13,7 @@ $.ajax({
     let token = JSON.parse(response);
     if(response === '' || response === false || token['accepted_users'] === undefined) {
         headerElement.innerHTML= 'No Reva Contact';
-        //$('#test').show(); 
+        $('#test').show(); 
     } else {
         headerElement.innerHTML= 'Reva Contacts';
 
@@ -59,5 +60,6 @@ $.ajax({
 }).fail(function (response, code) {
     console.log(response)
     //alert('The token is invalid')
+
 }); 
 });
