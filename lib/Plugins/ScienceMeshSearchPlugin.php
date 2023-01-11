@@ -60,6 +60,8 @@ class ScienceMeshSearchPlugin {
             "group" => [],
             "users" => $exactResults
         ];
+		error_log("returning searchResult:");
+		error_log(var_export($searchResult, true));
 		return $searchResult;
 	}
 }
