@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    document.getElementById('elem').onclick = function () {
+    document.getElementById('accept-token').onclick = function () {
         console.log('clicked');
         var full = document.getElementById('token-input').value
         var parts = full.split('@')
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
         if ((typeof params.token == 'string') && (params.token.length > 0) &&
           (typeof params.providerDomain == 'string') && (params.providerDomain.length > 0)) {
-          document.getElementById('token').value = `${params.token}@${params.providerDomain}`;
+          document.getElementById('token-input').value = `${params.token}@${params.providerDomain}`;
         }
       }
     
