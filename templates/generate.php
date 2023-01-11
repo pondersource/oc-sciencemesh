@@ -9,8 +9,8 @@ style('sciencemesh', 'style');
 
 	<div id="app-content">
 		<div id="app-content-wrapper" class="viewcontainer">
-			<div class="app-content-list" style="display: flex;">
-				<div href="#" class="app-content-list-item token-generator" id="elem">
+			<div class="app-content-list" style="display: flex;" id="elem">
+				<div href="#" class="app-content-list-item token-generator">
 					<div class="app-content-list-item-icon" style="background-color: rgb(31, 72, 96);">+</div>
 				</div>
 				<div>
