@@ -32,7 +32,7 @@ $.ajax({
                                     </div>`;                  
                             var element = document.getElementById("test_error");
                             element.innerHTML = result;
-                        // }
+                        }
 
                     $('#test_error').show();
                 }else{
