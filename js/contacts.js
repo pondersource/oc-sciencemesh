@@ -1,4 +1,5 @@
-//Everything will be for working with contacts
+document.addEventListener("DOMContentLoaded", function(event) {
+    //Everything will be for working with contacts
 var baseUrl = OC.generateUrl('/apps/sciencemesh');
 $('#test_error').hide(); 
 $.ajax({
@@ -95,3 +96,4 @@ document.getElementById('elem').onclick = function () {
         //alert('The token is invalid')
     });
 };
+});
