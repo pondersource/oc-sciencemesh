@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             const provider = new URL(idp).host;
                             const result = `
                                     <div href="#" class="app-content-list-item profile-item">
-                                        <div class="app-content-list-item-icon profile-item-img" style="">
+                                        <div class="app-content-list-item-icon" style="">
                                             <img src="https://cdn-icons-png.flaticon.com/512/16/16363.png">
                                         </div>
                                         <div class="app-content-list-item-line-one profile-item-username" id="show_result" >
