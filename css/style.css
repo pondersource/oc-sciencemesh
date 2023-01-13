@@ -125,13 +125,14 @@
 }
 
 .app-content-list-item-icon{
-   width: 20px;
-   height: 20px;
+   width: 30px;
+   height: 30px;
    margin: 10px;
-   color: white;
    font-size: large;
    text-align: center;
    border-radius: 100%;
+   padding: 3.3px;
+   border: 1px solid #0002;
 }
 
 
@@ -162,5 +163,5 @@
 
 .profile-item-username{
    width: 100%;
-   padding: 0px 5px;
+   padding: 3px 10px;
 }
