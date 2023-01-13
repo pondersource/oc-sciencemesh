@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let token = JSON.parse(response);
         for(tokenData in token) {
             if(token.hasOwnProperty(tokenData)) {
+                console.log(tokenData);
                 if(tokenData === 'accepted_users') {
                     let accepted_users = token.accepted_users
                         for(accept in accepted_users) {
@@ -51,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                 }
             } 
-            }
         }
+    }
     }).fail(function (response, code) {
         console.log(response)
         //alert('The token is invalid')
