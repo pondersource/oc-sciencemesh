@@ -1,16 +1,17 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     //Everything will be for working with contacts
     var baseUrl = OC.generateUrl('/apps/sciencemesh');
-    $('#test_error').hide(); 
+    $('#show_result').hide(); 
     $.ajax({
         url: baseUrl + '/contacts/users',
         type: 'GET',
         contentType: 'application/json',
     }).done(function (response) {
         if(response === '' || response === false) {
-            var element = document.getElementById("test_error");
+            var element = document.getElementById("show_result");
             element.innerHTML= 'No Sciencemesh Connection';
-            $('#test_error').show(); 
+            $(element).addClass('text-error');
+            $('#show_result').show();
         } else {
         let token = JSON.parse(response);
         for(tokenData in token) {
@@ -24,34 +25,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             const idp = accepted_users[accept].id.idp;
                             const provider = new URL(idp).host;
                             const result = `
-                                    <div href="#" class="app-content-list-item profile-item">
-                                        <div class="app-content-list-item-icon" style="">
-                                            <img src="https://cdn-icons-png.flaticon.com/512/16/16363.png">
-                                        </div>
-                                        <div class="app-content-list-item-line-one" id="show_result" >
-                                            <p class="displayname">${displayName}</p><p class="username-provider">${username}@${provider}</p>
-                                        </div>  
-                                    </div>`;                  
-                            var element = document.getElementById("test_error");
+                                    <tr class="app-content-list-item">
+                                        <td style="border-radius:100%">
+                                            <input name="profile[]" type="checkbox" class="input-checkbox-contacts">
+                                            <p class="icon-contacts-dark contacts-profile-img"></p>
+                                        </td>
+                                        <td class="app-content-list-item-line-one contact-item">
+                                            <p class="displayname">Marie</p>
+                                        </td>  
+                                        <td>
+                                            <p class="username-provider">marie@marie.marie</p>
+                                        </td>
+                                    </tr>
+                                    `;
+                            var element = document.getElementById("show_result");
                             element.innerHTML = result;
                         }
 
-                    $('#test_error').show();
+                    $('#show_result').show();
                 }else{
                     const result = `
-                            <div href="#" class="app-content-list-item profile-item" >
-                                <div class="app-content-list-item-icon" style="">
-                                </div> 
-                                <div class="app-content-list-item-line-one" id="show_result" >
+                            <tr colspan="3" href="#" class="app-content-list-item" >
+                                <td>
                                     <p class="username-provider">There are no contacts!</p>
-                                </div>  
-                            </div>`;                  
+                                </td>
+                            </tr>`;                  
                     var element = document.getElementById("show_result");
                     element.innerHTML = result;
-                    $('#test_error').show();
+                    $('#show_result').show();
 
                 }
-            } 
+            }
         }
     }
     }).fail(function (response, code) {
