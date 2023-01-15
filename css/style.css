@@ -181,7 +181,7 @@
 
 .contacts-table tbody tr td:first-child{
    text-align: center;
-   width: 40% !important;
+   width: 1% !important;
 }
 .contacts-table tbody tr td:nth-child(2){
    width: 20% !important;

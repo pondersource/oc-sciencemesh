@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }else{
                     const result = `
                             <tr colspan="3" href="#" class="app-content-list-item" >
-                                <td>
+                                <td style="width:40% !important">
                                     <p class="username-provider">There are no contacts!</p>
                                 </td>
                             </tr>`;                  
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     $('#show_result').show();
 
                 }
-            }
+            } 
         }
     }
     }).fail(function (response, code) {
