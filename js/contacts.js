@@ -31,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                             <p class="icon-contacts-dark contacts-profile-img"></p>
                                         </td>
                                         <td class="app-content-list-item-line-one contact-item">
-                                            <p class="displayname">Marie</p>
+                                            <p class="displayname">${displayName}</p>
                                         </td>  
                                         <td>
-                                            <p class="username-provider">marie@marie.marie</p>
+                                            <p class="username-provider">${username}</p>
                                         </td>
                                     </tr>
                                     `;
