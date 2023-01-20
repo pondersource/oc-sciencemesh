@@ -182,14 +182,16 @@
 .contacts-table tbody tr td:first-child{
    text-align: center;
    width: 1% !important;
+   /* border-left: 1px solid #ececec; */
 }
 .contacts-table tbody tr td:nth-child(2){
    width: 20% !important;
-   border-bottom: 1px solid #ececec;
+   /* border-left: 1px solid #ececec; */
 }
 .contacts-table tbody tr td:nth-child(3){
    width: 45% !important;
-   border-bottom: 1px solid #ececec;
+   padding-left: 5px;
+   /* border-: 1px solid #ececec; */
 }
 .contacts-profile-img{
    height: 35px;

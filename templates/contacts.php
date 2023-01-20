@@ -9,7 +9,7 @@ style('sciencemesh', 'style');
 	<div id="app-content">
 		<div id="app-content-wrapper" class="viewcontainer">
 			<div class="app-content-list">
-				<small class="contact-title-desc">* List of contacts that you were add them inside the cloud servers.</small>
+				<small class="contact-title-desc">* List of your ScienceMesh contacts.</small>
 				<table class="app-content-list-item contacts-table" id="contact-table">
 					<thead>
 						<tr>

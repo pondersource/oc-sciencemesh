@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             const result = `
                                     <tr class="app-content-list-item">
                                         <td style="border-radius:100%">
-                                            <input name="profile[]" type="checkbox" class="input-checkbox-contacts">
                                             <p class="icon-contacts-dark contacts-profile-img"></p>
                                         </td>
                                         <td class="app-content-list-item-line-one contact-item">
