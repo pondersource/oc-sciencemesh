@@ -44,7 +44,7 @@ class SettingsController extends Controller
 	                            IL10N $trans,
 	                            ILogger $logger,
 	                            AppConfig $config,
-								IConfig $IConfig
+				    IConfig $IConfig
 	)
 	{
 		parent::__construct($AppName, $request);
