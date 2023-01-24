@@ -4,6 +4,7 @@ namespace OCA\ScienceMesh\Plugins;
 
 use OC\User\User;
 use OCP\IConfig;
+use OCP\Share;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCA\ScienceMesh\RevaHttpClient;
@@ -26,40 +27,28 @@ class ScienceMeshSearchPlugin {
 		$this->revaHttpClient = new RevaHttpClient($this->config);
 	}
 
-	public function search($search, $limit, $offset) {
+	public function search($search) {
 		$result = json_decode($this->revaHttpClient->findAcceptedUsers($this->userId), true);
 		if (!isset($result['accepted_users'])) {
 			return [];
 		}
 		$users = $result['accepted_users'];
+        error_log("Found " . count($users) . " users");
 
-		$users = array_filter($users, function ($user) use ($search) {
-			return (stripos($user['display_name'], $search) !== false);
-		});
-		$users = array_slice($users, $offset, $limit);
-
-		$exactResults = [];
+		$result = [];
 		foreach ($users as $user) {
 			$serverUrl = parse_url($user['id']['idp']);
 			$domain = $serverUrl["host"];
-			$exactResults[] = [
-				"label" => "Label",
-				"uuid" => $user['id']['opaque_id'],
-				"name" => $user['display_name'] ."@". $domain, // FIXME: should this be just the part before the @ sign?
-				"type" => "ScienceMesh",
-				"value" => [
-					"shareType" =>  \OCP\Share::SHARE_TYPE_REMOTE,
-					"shareWith" => $user['id']['opaque_id'] ."@". $domain, // FIXME: should this be just the part before the @ sign?
-					"server" => $user['id']['idp']
-				]
+			$result[] = [
+				'label' => $user['display_name'] ." (". $domain . ")",
+				'value' => [
+					'shareType' => Share::SHARE_TYPE_REMOTE,
+					'shareWith' => $user['id']['opaque_id'] ."@". $user['id']['idp'],
+				],
 			];
 		}
-		$resultType = new SearchResultType('remotes');
-		$searchResult = [
-            "type" => $resultType,
-            "group" => [],
-            "users" => $exactResults
-        ];
-		return $searchResult;
+		error_log("returning result:");
+		error_log(var_export($result, true));
+		return $result;
 	}
 }
