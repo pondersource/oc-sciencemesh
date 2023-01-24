@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                         <div class="app-content-list-item-icon" style="">
                                             <img src="https://cdn-icons-png.flaticon.com/512/16/16363.png">
                                         </div>
-                                        <div class="app-content-list-item-line-one" id="show_result" >
+                                        <div class="app-content-list-item-line-one profile-item-username" id="show_result" >
                                             <p class="displayname">${displayName}</p><p class="username-provider">${username}@${provider}</p>
                                         </div>  
                                     </div>`;                  
