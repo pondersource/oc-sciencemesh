@@ -43,7 +43,7 @@ class SettingsController extends Controller
 	                            IURLGenerator $urlGenerator,
 	                            IL10N $trans,
 	                            ILogger $logger,
-	                            AppConfig $config,
+	                            AppConfig $appConfig,
 				    IConfig $IConfig
 	)
 	{
@@ -53,7 +53,7 @@ class SettingsController extends Controller
 
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->config = $config;
+		$this->config = $appConfig;
 
 		$eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
