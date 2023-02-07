@@ -41,7 +41,7 @@ class RevaHttpClient {
 	 * RevaHttpClient constructor.
 	 *
 	 */
-	public function __construct(IConfig $config) {
+	public function __construct(IConfig $config, $curlDebug = true) {
 		$this->config = $config;
 		$this->serverConfig = new \OCA\ScienceMesh\ServerConfig($config);
 		$this->revaUrl = $this->serverConfig->getIopUrl();
@@ -136,7 +136,7 @@ class RevaHttpClient {
 	}
 
 	public function ocmProvider() {
-		return $this->revaGet('ocm/ocm-provider');
+		return $this->revaGet('ocm/ocm-provider',$this->revaUser);
 	}
 
 	public function findAcceptedUsers($userId) {
