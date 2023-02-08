@@ -46,7 +46,7 @@ class RevaHttpClient {
 		$this->serverConfig = new \OCA\ScienceMesh\ServerConfig($config);
 		$this->revaUrl = $this->serverConfig->getIopUrl();
 		$this->revaLoopbackSecret = $this->serverConfig->getRevaLoopbackSecret();
-		$this->curlDebug = true;
+		$this->curlDebug = $curlDebug;
 	}
 
 	private function curlGet($url, $user, $params = []) {
