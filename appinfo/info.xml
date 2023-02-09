@@ -13,4 +13,10 @@
     <dependencies>
         <owncloud min-version="10" max-version="10"/>
     </dependencies>
+    <settings>
+        <admin>OCA\ScienceMesh\Settings\SciencemeshSettingsAdmin</admin>
+    </settings>
+	<settings-sections>
+        <admin>OCA\ScienceMesh\Sections\SciencemeshSettingsAdmin</admin>
+	</settings-sections>
 </info>
