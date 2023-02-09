@@ -22,13 +22,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 jQuery(element).addClass('text-error');
             } else if(response.startsWith('Accepted invite from')){
                 document.getElementById('token').value = '';
-                alert(response);
+                element.innerHTML = 'Invitation has successfully accepted!';
+                jQuery(element).addClass('text-error');
             } else {
                 let result = JSON.parse(response);
                 if (result.hasOwnProperty('message')) {
                     let test = result.message;
                     element.innerHTML = test || 'Success';
-                    jQuery(element).addClass('text-success');
+                    jQuery(element).addClass('text-error');
                     $('#provider').hide();
                     $('#display_name').hide();
                 } else {

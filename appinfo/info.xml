@@ -16,7 +16,7 @@
     <settings>
         <admin>OCA\ScienceMesh\Settings\SciencemeshSettingsAdmin</admin>
     </settings>
-	<settings-sections>
+    <settings-sections>
         <admin>OCA\ScienceMesh\Sections\SciencemeshSettingsAdmin</admin>
-	</settings-sections>
+    </settings-sections>
 </info>

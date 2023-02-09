@@ -45,7 +45,7 @@ class SettingsController extends Controller
 	                            IL10N $trans,
 	                            ILogger $logger,
 	                            AppConfig $config,
-								IConfig $IConfig
+								              IConfig $IConfig
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -54,7 +54,7 @@ class SettingsController extends Controller
 
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->config = $config;
+		$this->config = $appConfig;
 
 		$eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
@@ -240,8 +240,6 @@ class SettingsController extends Controller
 	{
 		$sciencemesh_iop_url = $this->request->getParam('sciencemesh_iop_url');
 		$this->serverConfig->setIopUrl($sciencemesh_iop_url);
-		$this->serverConfig->getRevaLoopbackSecret();
-		$this->serverConfig->getRevaSharedSecret();
 
 		return new DataResponse(["status" => true]);
 	}
