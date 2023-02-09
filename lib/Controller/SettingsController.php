@@ -2,6 +2,7 @@
 
 namespace OCA\ScienceMesh\Controller;
 
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -11,6 +12,7 @@ use OCP\IURLGenerator;
 use OCA\ScienceMesh\AppConfig;
 use OCA\ScienceMesh\Crypt;
 use OCA\ScienceMesh\DocumentService;
+use OCA\ScienceMesh\RevaHttpClient;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -28,6 +30,7 @@ class SettingsController extends Controller
 	private $config;
 	private $urlGenerator;
 	private $serverConfig;
+	private $userId;
 
 	const CATALOG_URL = "https://iop.sciencemesh.uni-muenster.de/iop/mentix/sitereg";
 
@@ -45,7 +48,8 @@ class SettingsController extends Controller
 	                            IL10N $trans,
 	                            ILogger $logger,
 	                            AppConfig $config,
-								              IConfig $IConfig
+								IConfig $sciencemeshConfig,
+								$UserId
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -242,5 +246,21 @@ class SettingsController extends Controller
 		$this->serverConfig->setIopUrl($sciencemesh_iop_url);
 
 		return new DataResponse(["status" => true]);
+	}
+
+	/**
+	 * Check IOP URL connection
+	 *
+	 * @return array
+	 *
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
+	public function checkConnectionSettings(){
+		$revaHttpClient = new RevaHttpClient($this->sciencemeshConfig, false);
+		echo($revaHttpClient->ocmProvider());die;
+		$response_sciencemesh_iop_url = json_decode(str_replace('\n','',$revaHttpClient->ocmProvider()),true);
+		
+        return new JSONResponse($response_sciencemesh_iop_url);
 	}
 }
