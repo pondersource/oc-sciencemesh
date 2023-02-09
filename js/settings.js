@@ -107,19 +107,27 @@
                 },
                 success: function onSuccess(response) {
                     $(".section-sciencemesh").removeClass("icon-loading");
-                    if (response) {
-                        var message =
-                            response.error
-                                ? (t(OCA.ScienceMesh.AppName, "Connection lost") + " (" + response.error + ")")
-                                : t(OCA.ScienceMesh.AppName, "Connection is available");
+                    if(response){
+                        var res = JSON.parse(response);
+                        if (res.enabled) {
+                            var message = t(OCA.ScienceMesh.AppName, "Connection is available");
+                        }else{
+                            var message = t(OCA.ScienceMesh.AppName, "Connection is not available");
+                        }
 
-                        var versionMessage = response.version ? (" (" + t(OCA.ScienceMesh.AppName, "version") + " " + response.version + ")") : "";
+                        OC.Notification.show(message, {
+                            type: "error",
+                            timeout: 10
+                        });
 
-                        OC.Notification.show(message + versionMessage, {
-                            type: response.error ? "error" : "info",
+                    }else{
+                        var message = t(OCA.ScienceMesh.AppName, "Connection is not available");
+                        OC.Notification.show(message, {
+                            type: "error",
                             timeout: 10
                         });
                     }
+
                 }
             });
         });

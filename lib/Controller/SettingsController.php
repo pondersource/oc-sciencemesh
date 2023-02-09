@@ -30,6 +30,7 @@ class SettingsController extends Controller
 	private $config;
 	private $urlGenerator;
 	private $serverConfig;
+	private $sciencemeshConfig;
 	private $userId;
 
 	const CATALOG_URL = "https://iop.sciencemesh.uni-muenster.de/iop/mentix/sitereg";
@@ -54,11 +55,13 @@ class SettingsController extends Controller
 	{
 		parent::__construct($AppName, $request);
 
-		$this->serverConfig = new \OCA\ScienceMesh\ServerConfig($IConfig);
+		$this->serverConfig = new \OCA\ScienceMesh\ServerConfig($sciencemeshConfig);
 
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->config = $appConfig;
+		$this->config = $config;
+		$this->sciencemeshConfig = $sciencemeshConfig;
+		$this->userId = $UserId;
 
 		$eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
