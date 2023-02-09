@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("Hello there")
     document.getElementById('accept-button').onclick = function () {
         console.log('clicked');
         var full = document.getElementById('token-input').value
@@ -52,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
         if ((typeof params.token == 'string') && (params.token.length > 0) &&
           (typeof params.providerDomain == 'string') && (params.providerDomain.length > 0)) {
-            console.log("checkQueryString success!");
             document.getElementById('token-input').value = `${params.token}@${params.providerDomain}`;
             document.getElementById('providerDomain').innerHTML = params.providerDomain;
             $("#dialog").show();
