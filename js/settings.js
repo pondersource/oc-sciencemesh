@@ -64,6 +64,15 @@
             $(".section-sciencemesh").addClass("icon-loading");
             var baseUrl = OC.generateUrl('/apps/sciencemesh');
 
+        $('#sciencemesh_setting_submit_btn').on('click',function(){
+            var sciencemesh_iop_url = $('#sciencemesh_iop_url').val().trim();
+            var sciencemesh_shared_secret = $("#sciencemesh_shared_secret").val().trim();
+            var sciencemesh_loopback_shared_secret = $("#sciencemesh_loopback_shared_secret").val().trim();
+
+            $(".section-sciencemesh").addClass("icon-loading");
+            var baseUrl = OC.generateUrl('/apps/sciencemesh');
+    
+
             $.ajax({
                 method: "GET",
                 url: baseUrl + "/ajax/sciencemesh_settings/save",
@@ -90,7 +99,9 @@
                     }
                 }
             });
+
         });
+
 
         $('#check_connection_sciencemesh_iop_url').on('click',function(){
             var sciencemesh_iop_url = $("#sciencemesh_iop_url").val().trim();
@@ -131,7 +142,6 @@
                 }
             });
         });
-
     });
 
 })(jQuery, OC);

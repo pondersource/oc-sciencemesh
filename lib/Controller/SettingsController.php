@@ -51,6 +51,7 @@ class SettingsController extends Controller
 	                            AppConfig $config,
 								IConfig $sciencemeshConfig,
 								$UserId
+
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -60,6 +61,9 @@ class SettingsController extends Controller
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
 		$this->config = $config;
+		$this->sciencemeshConfig = $sciencemeshConfig;
+		$this->userId = $UserId;
+
 		$this->sciencemeshConfig = $sciencemeshConfig;
 		$this->userId = $UserId;
 
@@ -259,6 +263,7 @@ class SettingsController extends Controller
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
+
 	public function checkConnectionSettings(){
 		$revaHttpClient = new RevaHttpClient($this->sciencemeshConfig, false);
 		echo($revaHttpClient->ocmProvider());die;
