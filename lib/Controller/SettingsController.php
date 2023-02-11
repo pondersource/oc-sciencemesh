@@ -50,7 +50,7 @@ class SettingsController extends Controller
 	                            ILogger $logger,
 	                            AppConfig $config,
 								IConfig $sciencemeshConfig,
-								$userId
+								$UserId
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -59,12 +59,11 @@ class SettingsController extends Controller
 
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->config = $appConfig;
-
+		$this->config = $config;
 		$this->sciencemeshConfig = $sciencemeshConfig;
-		$this->userId = $userId;
+		$this->userId = $UserId;
 
-		$eventDispatcher = \OC::$server->getEventDispatcher();
+    $eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
 			'OCA\Files::loadAdditionalScripts',
 			function () {
@@ -252,6 +251,14 @@ class SettingsController extends Controller
 		return new DataResponse(["status" => true]);
 	}
 
+	/**
+	 * Check IOP URL connection
+	 *
+	 * @return array
+	 *
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
 
 	public function checkConnectionSettings(){
 		$revaHttpClient = new RevaHttpClient($this->sciencemeshConfig, false);
