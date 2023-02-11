@@ -20,6 +20,7 @@ use OCP\AppFramework\Http\TextPlainResponse;
 use OCP\AppFramework\Http;
 use OCA\Sciencemesh\ServerConfig;
 use OCP\IConfig;
+
 /**
  * Settings controller for the administration page
  */
@@ -29,6 +30,7 @@ class SettingsController extends Controller
 	private $config;
 	private $urlGenerator;
 	private $serverConfig;
+	private $sciencemeshConfig;
 	private $userId;
 
 	const CATALOG_URL = "https://iop.sciencemesh.uni-muenster.de/iop/mentix/sitereg";
@@ -46,9 +48,10 @@ class SettingsController extends Controller
 	                            IURLGenerator $urlGenerator,
 	                            IL10N $trans,
 	                            ILogger $logger,
-	                            AppConfig $appConfig,
-				    IConfig $sciencemeshConfig,
-				    $UserId
+	                            AppConfig $config,
+								IConfig $sciencemeshConfig,
+								$UserId
+
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -57,7 +60,9 @@ class SettingsController extends Controller
 
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->config = $appConfig;
+		$this->config = $config;
+		$this->sciencemeshConfig = $sciencemeshConfig;
+		$this->userId = $UserId;
 
 		$this->sciencemeshConfig = $sciencemeshConfig;
 		$this->userId = $UserId;
@@ -234,6 +239,14 @@ class SettingsController extends Controller
 	}
 
 
+	/**
+	 * Save sciencemesh settings
+	 *
+	 * @return array
+	 *
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
 	public function SaveSciencemeshSettings()
 	{
 		$sciencemesh_iop_url = $this->request->getParam('sciencemesh_iop_url');
@@ -242,6 +255,14 @@ class SettingsController extends Controller
 		return new DataResponse(["status" => true]);
 	}
 
+	/**
+	 * Check IOP URL connection
+	 *
+	 * @return array
+	 *
+	 * @NoAdminRequired
+	 * @PublicPage
+	 */
 
 	public function checkConnectionSettings(){
 		$revaHttpClient = new RevaHttpClient($this->sciencemeshConfig, false);

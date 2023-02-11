@@ -1,5 +1,5 @@
 # ScienceMesh
-Place this app in **nextcloud/apps/**
+Place this app in **/var/www/html/apps/**
 
 ## Building the app
 

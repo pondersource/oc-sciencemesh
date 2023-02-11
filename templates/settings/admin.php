@@ -22,7 +22,7 @@ style('sciencemesh', 'style');
         </div>
         <div class="sciencemesh-settings-row">
             <label for="sciencemesh_shared_secret" name="sciencemesh_shared_secret">Shared Secret</label>
-            <input type="text" name="sciencemesh_shared_secret" id="sciencemesh_shared_secret" value="<?php echo $this->vars['sciencemeshRevaSharedSecret']; ?>">
+            <input type="text" readonly="true" id="sciencemesh_shared_secret" value="<?php echo $this->vars['sciencemeshRevaSharedSecret']; ?>">
         </div>
         <div class="sciencemesh-settings-row">
             <label for="sciencemesh_loopback_shared_secret" name="sciencemesh_iop_url">Loopback Secret</label>
