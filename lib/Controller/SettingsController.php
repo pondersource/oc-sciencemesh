@@ -51,7 +51,6 @@ class SettingsController extends Controller
 	                            AppConfig $config,
 								IConfig $sciencemeshConfig,
 								$UserId
-
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -64,10 +63,7 @@ class SettingsController extends Controller
 		$this->sciencemeshConfig = $sciencemeshConfig;
 		$this->userId = $UserId;
 
-		$this->sciencemeshConfig = $sciencemeshConfig;
-		$this->userId = $UserId;
-
-		$eventDispatcher = \OC::$server->getEventDispatcher();
+    $eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
 			'OCA\Files::loadAdditionalScripts',
 			function () {
