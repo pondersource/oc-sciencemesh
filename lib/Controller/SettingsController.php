@@ -247,6 +247,8 @@ class SettingsController extends Controller
 	{
 		$sciencemesh_iop_url = $this->request->getParam('sciencemesh_iop_url');
 		$this->serverConfig->setIopUrl($sciencemesh_iop_url);
+		$this->serverConfig->getRevaLoopbackSecret();
+		$this->serverConfig->getRevaSharedSecret();
 
 		return new DataResponse(["status" => true]);
 	}
