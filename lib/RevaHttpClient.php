@@ -58,18 +58,17 @@ class RevaHttpClient {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		if ($this->revaUser && $this->revaLoopbackSecret) {
 			curl_setopt($ch, CURLOPT_USERPWD, $user.":".$this->revaLoopbackSecret);
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		}
-		
+
 		if ($this->curlDebug) {
 			curl_setopt($ch, CURLOPT_VERBOSE, true);
 			$streamVerboseHandle = fopen('php://temp', 'w+');
 			curl_setopt($ch, CURLOPT_STDERR, $streamVerboseHandle);
 		}
-
+		
 		$output = curl_exec($ch);
 
 		if ($this->curlDebug) {
@@ -96,6 +95,7 @@ class RevaHttpClient {
 		}
 		$output = curl_exec($ch);
 		$info = curl_getinfo($ch);
+		error_log('curl output:' . var_export($output, true) . ' info: ' . var_export($info, true));
 		curl_close($ch);
 		return $output;
 	}
@@ -111,6 +111,7 @@ class RevaHttpClient {
 	}
 
 	public function createShare($user, $params) {
+		error_log("RevaHttpClient createShare");
 		if (!isset($params['sourcePath'])) {
 			throw new \Exception("Missing sourcePath", 400);
 		}
@@ -129,12 +130,13 @@ class RevaHttpClient {
 		$params["loginType"] = "basic";
 		$params["loginUsername"] = $user;
 		$params["loginPassword"] = $this->revaLoopbackSecret;
+		error_log("Calling reva/ocm/send " . json_encode($params));
 		$responseText = $this->revaPost('ocm/send', $user, $params);
 		return json_decode($responseText);
 	}
 
-	public function ocmProvider($userId = '') {
-		return $this->revaGet('ocm/ocm-provider',$userId);
+	public function ocmProvider() {
+		return $this->revaGet('ocm/ocm-provider',$this->revaUser);
 	}
 
 	public function findAcceptedUsers($userId) {
@@ -152,6 +154,7 @@ class RevaHttpClient {
 
 	public function generateTokenFromReva($userId) {
 		$tokenFromReva = $this->revaPost('ocm/invites/generate', $userId);
+		error_log('Got token from reva!' . $tokenFromReva);
 		return json_decode($tokenFromReva, true);
 	}
 }
