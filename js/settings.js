@@ -92,7 +92,6 @@
             });
 
         });
-    });
 
     $('#check_connection_sciencemesh_iop_url').on('click',function(){
         var sciencemesh_iop_url = $("#sciencemesh_iop_url").val().trim();
@@ -133,4 +132,6 @@
             }
         });
     });
+});
+
 })(jQuery, OC);
