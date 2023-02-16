@@ -19,4 +19,11 @@
     <settings-sections>
 	<admin>OCA\ScienceMesh\Sections\SciencemeshSettingsAdmin</admin>
     </settings-sections>
+    <navigations>
+        <navigation>
+            <name>ScienceMesh</name>
+            <route>sciencemesh.app.contacts</route>
+            <order>10</order>
+        </navigation>
+    </navigations>
 </info>
