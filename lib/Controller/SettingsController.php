@@ -50,7 +50,7 @@ class SettingsController extends Controller
 	                            ILogger $logger,
 	                            AppConfig $config,
 								IConfig $sciencemeshConfig,
-								$UserId
+								$userId
 	)
 	{
 		parent::__construct($AppName, $request);
@@ -61,7 +61,7 @@ class SettingsController extends Controller
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->sciencemeshConfig = $sciencemeshConfig;
-		$this->userId = $UserId;
+		$this->userId = $userId;
 
     $eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener(
@@ -265,7 +265,7 @@ class SettingsController extends Controller
 
 	public function checkConnectionSettings(){
 		$revaHttpClient = new RevaHttpClient($this->sciencemeshConfig, false);
-		$response_sciencemesh_iop_url = json_decode(str_replace('\n','',$revaHttpClient->ocmProvider()),true);
+		$response_sciencemesh_iop_url = json_decode(str_replace('\n','',$revaHttpClient->ocmProvider($this->userId)),true);
 		
         return new JSONResponse($response_sciencemesh_iop_url);
 	}
