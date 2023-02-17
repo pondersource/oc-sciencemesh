@@ -10,6 +10,28 @@
  * Page: templates/generate.php
 */
 
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css";
+
+.app-sciencemesh #app{
+   display: contents;
+}
+#app{
+   width: 100% !important;
+}
+
+.app-content-list{
+   max-width: 100% !important;
+}
+
+#app{
+   width: 100% !important;
+}
+
+.app-content-list{
+   max-width: 100% !important;
+}
+
+
 .token-added{
    width: 30px;
    height: 30px;
@@ -39,12 +61,40 @@
    right:0
 }
 
-#token-generator{
-   cursor:pointer;
+#contact-toolbar{
+   margin: 20px 10px 0px;
+   display: flex;
 }
 
 #token-generator{
-   cursor:pointer;
+   color: white;
+   cursor: pointer;
+   width: auto;
+   height: 36px;
+   border-radius: 0.2em;
+   border: 0;
+   background-color: rgb(31, 72, 96);
+   font-size: medium;
+   padding: 5px 15px 0px 5px;
+   display: flex;
+}
+
+
+#token-generator:hover {
+   background-color: rgb(57, 142, 192);
+}
+
+
+#token-generator .button-icon {
+   display: block;
+   width: 20px;
+   height: 25px;
+   margin: 0 2.5px;
+   filter: invert(1);
+}
+
+.generated-token-link{
+   height: 36px !important;
 }
 
 #token-input{
@@ -78,8 +128,14 @@
 
 .message-token{
    margin:0px;
-   background: #cecece;
+   color: green;
    padding:5px;
+   width: 180px;
+   font-size: 12px;
+   padding:5px 6px;
+   height:36px;
+   border-radius: 5px;
+   margin: 2.5px 5px;
 }
 
 .generated-token-link{
@@ -169,15 +225,7 @@
    padding: 12.5px 10px;
    width: 100%;
 }
-.sciencemesh-settings-row label{
-   display: inline-block;
-   font-weight: bolder !important;
-   width: 200px !important;
-}
 
-.sciencemesh-settings-row input[type="text"]{
-   width: 80% !important;
-}
 
 .section-sciencemesh{
    margin: 10px !important;
@@ -200,6 +248,7 @@
 .contacts-table thead th,.contacts-table thead td {
    border: 1px solid #041e4222;
    border-radius: 3px;
+   padding:5px 15px !important;
  }
  
 .contacts-table thead tr td{
@@ -214,6 +263,15 @@
 .contacts-table tbody tr td:first-child{
    text-align: center;
    width: 1% !important;
+}
+.contacts-table tbody .app-content-list-item{
+   height: auto !important;
+   padding: 5px 10px;
+}
+
+.contacts-table tbody tr th{
+   height: auto !important;
+   padding: 5px 10px;
 }
 .contacts-table tbody tr td:nth-child(2){
    width: 20% !important;
@@ -241,7 +299,7 @@
 }
 .contact-title-desc{
    display: block;
-   margin: 10px 0 -10px 25px;
+   margin: 0 0 -10px 25px;
    width: 100%;
 }
 .input-checkbox-contacts{
@@ -253,4 +311,70 @@
 .username-provider{
    width: 45%;
    text-align: left;
+}
+
+	
+.token-generator{
+   width:100%;
+   display:flex;
+}
+
+#app-content-wrapper {
+   display: flex;
+   flex-direction: row;
+}
+#contact-toolbar {
+   align-items: center;
+}
+
+#invitation-details {
+   width: 80%;
+   align-items: center;
+}
+
+.contact-title-desc {
+   margin-top: 0.3rem;
+   margin-left: 1rem;
+}
+
+.contacts-table {
+   margin-top: 1rem;
+   border-collapse: collapse;
+}
+
+.share-options {
+   display: inline-block;
+   margin: 10px 0;
+}
+.share-select {
+   font-size: 16px;
+   padding: 5px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE2IDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMTYpIj4KICAgIDxwYXRoIGZpbGw9IiMyRjVGNUYiIGQ9Ik0gMTQuNSwxNiAwLjUsMTYgMC44LDIyLjIgNS4yLDIyLjIgMTQuNSwyMi4yIDE0LjUsMTYgWiIvPgogIDwvZz4KPC9zdmc+Cg==);
+   background-size: 8px 4px;
+   background-repeat: no-repeat;
+   background-position: right;
+   cursor: pointer;
+}
+
+.sciencemesh-settings-row label{
+   width: 15%;
+   display: inline-block;
+}
+.sciencemesh-settings-row input[type="text"]{
+   margin: 5px;
+}
+
+#sciencemesh_setting_submit_btn{
+   float: right;
+   margin: 5px 60px;
+   width: 143.4px;
+}
+#share-token-btn{
+   background-size: 20px !important;
+   width: 30px;
 }
