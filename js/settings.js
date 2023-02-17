@@ -105,10 +105,9 @@
             data: {
                 sciencemesh_iop_url: sciencemesh_iop_url
             },
-            success: function onSuccess(response) {
+            success: function onSuccess(res) {
                 $(".section-sciencemesh").removeClass("icon-loading");
-                if(response){
-                    var res = JSON.parse(response);
+                if(res){
                     if (res.enabled) {
                         var message = t(OCA.ScienceMesh.AppName, "Connection is available");
                     }else{
