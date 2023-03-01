@@ -173,7 +173,7 @@
 
 #test_error{
    padding: 5px;
-   border: 1px dashed #eee;
+   border: 1px dashed darkgreen;
    margin: 0 10px;
    text-align: center;
 }
