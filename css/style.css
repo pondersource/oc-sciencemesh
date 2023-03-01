@@ -173,8 +173,9 @@
 
 #test_error{
    padding: 5px;
-   border: 1px dashed darkgreen;
-   margin: 0 10px;
+   border: 1px dashed;
+   border-radius: 4px;
+   margin: 10px 10px;
    text-align: center;
 }
 
@@ -229,9 +230,6 @@
    margin: 10px !important;
 }
 
-.text-success{
-   color: green !important;
-}
 
 .contacts-table{
    width: 98%;
