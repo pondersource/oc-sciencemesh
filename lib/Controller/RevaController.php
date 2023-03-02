@@ -867,7 +867,8 @@ class RevaController extends Controller {
 		$revaPath = $this->getRevaPathFromOpaqueId($resourceOpaqueId); // "/other/q/f gr"
 		$nextcloudPath = $this->revaPathToNextcloudPath($revaPath);
 
-		$revaPermissions = $params["webdavOptions"]["permissions"]; // {"getPath":true, "initiateFileDownload":true, "listContainer":true, "listFileVersions":true, "stat":true}
+		// FIXME: deal with possible presence of multiple accessMethods
+		$revaPermissions = $params["accessMethods"][0]["webdavOptions"]["permissions"]; // {"getPath":true, "initiateFileDownload":true, "listContainer":true, "listFileVersions":true, "stat":true}
 		$granteeType = $params["grantee"]["type"]; // "GRANTEE_TYPE_USER"
 		$granteeHost = $params["grantee"]["userId"]["idp"]; // "revanc2.docker"
 		$granteeUser = $params["grantee"]["userId"]["opaqueId"]; // "marie"
