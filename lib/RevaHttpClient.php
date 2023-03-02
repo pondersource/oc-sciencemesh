@@ -120,8 +120,8 @@ class RevaHttpClient {
 		$params["loginType"] = "basic";
 		$params["loginUsername"] = $user;
 		$params["loginPassword"] = $this->revaLoopbackSecret;
-		error_log("Calling reva/ocm/send " . json_encode($params));
-		$responseText = $this->revaPost('ocm/send', $user, $params);
+		error_log("Calling reva/sciencemesh/create-share " . json_encode($params));
+		$responseText = $this->revaPost('sciencemesh/create-share', $user, $params);
 		return json_decode($responseText);
 	}
 
