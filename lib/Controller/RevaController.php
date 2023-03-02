@@ -867,16 +867,14 @@ class RevaController extends Controller {
 		$revaPath = $this->getRevaPathFromOpaqueId($resourceOpaqueId); // "/other/q/f gr"
 		$nextcloudPath = $this->revaPathToNextcloudPath($revaPath);
 
-		$revaPermissions = $params["permissions"]["permissions"]; // {"getPath":true, "initiateFileDownload":true, "listContainer":true, "listFileVersions":true, "stat":true}
+		$revaPermissions = $params["webdavOptions"]["permissions"]; // {"getPath":true, "initiateFileDownload":true, "listContainer":true, "listFileVersions":true, "stat":true}
 		$granteeType = $params["grantee"]["type"]; // "GRANTEE_TYPE_USER"
 		$granteeHost = $params["grantee"]["userId"]["idp"]; // "revanc2.docker"
 		$granteeUser = $params["grantee"]["userId"]["opaqueId"]; // "marie"
 
 		$nextcloudPermissions = $this->getPermissionsCode($revaPermissions);
 		$shareWith = $granteeUser."@".$granteeHost;
-		$sharedSecretBase64 = $params["grantee"]["opaque"]["map"]["sharedSecret"]["value"];
-		$sharedSecret = base64_decode($sharedSecretBase64);
-		error_log("base64 decoded $sharedSecretBase64 to $sharedSecret");
+		$token = $params["token"];
 		try {
 			$node = $this->userFolder->get($nextcloudPath);
 		} catch (NotFoundException $e) {
@@ -895,7 +893,7 @@ class RevaController extends Controller {
 		$share->setSharedWith($shareWith);
 		$share->setShareOwner($owner);
 		$share->setPermissions($nextcloudPermissions);
-		$share->setToken($sharedSecret);
+		$share->setToken($token);
 		error_log("calling createInternal");
 		$share = $this->shareProvider->createInternal($share);
 		// $response = $this->shareInfoToCs3Share($share);
@@ -916,7 +914,8 @@ class RevaController extends Controller {
 		$shareData = [
 			"remote" => $params["share"]["owner"]["idp"], // FIXME: 'nc1.docker' -> 'https://nc1.docker/'
 			"remote_id" =>  base64_decode($params["share"]["grantee"]["opaque"]["map"]["remoteShareId"]["value"]), // FIXME: $this->shareProvider->createInternal($share) suppresses, so not getting an id there, see https://github.com/pondersource/sciencemesh-nextcloud/issues/57#issuecomment-1002143104
-			"share_token" => base64_decode($params["share"]["grantee"]["opaque"]["map"]["sharedSecret"]["value"]), // 'tDPRTrLI4hE3C5T'
+			//"share_token" => base64_decode($params["share"]["grantee"]["opaque"]["map"]["sharedSecret"]["value"]), // 'tDPRTrLI4hE3C5T'
+			"share_token" => $params["token"],
 			"password" => "",
 			"name" => rtrim($params["share"]["name"], "/"), // '/grfe'
 			"owner" => $params["share"]["owner"]["opaqueId"], // 'einstein'
