@@ -173,7 +173,10 @@
 
 #test_error{
    padding: 5px;
-   border: 1px dashed #eee;
+   border: 1px dashed;
+   border-radius: 4px;
+   margin: 10px 10px;
+   text-align: center;
 }
 
 .section{
@@ -212,10 +215,6 @@
 
 
 
-.text-error{
-   color:red !important;
-}
-
 .text-success{
    color: green !important;
 }
@@ -231,13 +230,6 @@
    margin: 10px !important;
 }
 
-.text-error{
-   color:red !important;
-}
-
-.text-success{
-   color: green !important;
-}
 
 .contacts-table{
    width: 98%;
@@ -320,8 +312,8 @@
 }
 
 #app-content-wrapper {
-   display: flex;
-   flex-direction: row;
+   /* display: flex;
+   flex-direction: row; */
 }
 #contact-toolbar {
    align-items: center;
